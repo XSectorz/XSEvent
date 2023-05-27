@@ -34,6 +34,8 @@ public class XSEventUI {
         inventory.setItem(50,Utils.createDecoration("next"));
         inventory.setItem(53,Utils.createDecoration("info"));
 
+        Bukkit.broadcastMessage("TEST COMMIT");
+
         for(int i = 0 ; i < 53 ; i++) {
             if(usedSlot.contains(i)) {
                 continue;
