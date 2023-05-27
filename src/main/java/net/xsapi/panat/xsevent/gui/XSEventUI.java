@@ -39,15 +39,15 @@ public class XSEventUI {
         for(int i = 0 ; i < 53 ; i++) {
             if(usedSlot.contains(i)) {
                 continue;
-            } else {
-                inventory.setItem(i,Utils.createDecoration("blocked"));
             }
+
+            inventory.setItem(i,Utils.createDecoration("blocked"));
         }
 
         xsPlayer xPlayer = core.XSPlayer.get(p.getUniqueId());
 
 
-        int index = 0 + (8  * (xPlayer.getEvtPage()-1));
+        int index = (8  * (xPlayer.getEvtPage()-1));
 
         for(int i = 0 ; i < 8 ; i++) {
 
