@@ -1,0 +1,11 @@
+name: XSEvent
+version: '1.0-SNAPSHOT'
+main: net.xsapi.panat.xsevent.core.core
+api-version: 1.19
+authors: [ PanatXsectorZ ]
+depend: [Vault]
+softdepend: [PlayerPoints, CustomFishing]
+description: Make your player have a task event!
+commands:
+  xsevent:
+    description: command for xsevent plugin

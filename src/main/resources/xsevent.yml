@@ -1,0 +1,41 @@
+xsevent:
+  events:
+    siam_fishing_event:
+      icon:
+        material: FISHING_ROD
+        modelData: 0
+        name: "&x&C&5&B&0&3&3[กิจกรรม] &x&9&7&E&2&7&1แข่งขันตกปลา"
+        lore:
+          - "&r"
+          - "&x&A&9&D&B&8&Fวันที่จัดกิจกรรม : %date%"
+          - "&x&A&9&D&B&8&Fเวลาที่จัดกิจกรรม : %timer%"
+        isGlowWhenActivate: true #เรืองแสงเมื่อถึงช่วงอีเวนต์
+      eventType: CUSTOM_FISHING
+      eventRepeat: MONDAY,WEDNESDAY,FRIDAY-SUNDAY
+      eventTimer:
+        round_1:
+          time_to_start: "09:00:00" #ในเวลาประเทศไทย
+          time_to_alive: 900 #ในหน่วยวินาที
+        round_2:
+          time_to_start: "15:00:00" #ในเวลาประเทศไทย
+          time_to_alive: 1800 #ในหน่วยวินาที
+        round_3:
+          time_to_start: "21:00:00" #ในเวลาประเทศไทย
+          time_to_alive: 900 #ในหน่วยวินาที
+      eventTrigger:
+        start:
+          commands:
+            - "customfishing competition start example"
+        end:
+          commands:
+            - "customfishing competition end"
+      event_rewards:
+        prize:
+          1_prize:
+            commands:
+              - "TEST TEST"
+              - "TEST TEST"
+          2-5_prize:
+            commands:
+              - "TEST TEST"
+              - "TEST TEST"

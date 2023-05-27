@@ -1,0 +1,42 @@
+
+gui:
+  title: "&8Events"
+  sound:
+    enable: true
+    type: BLOCK_CHEST_OPEN
+  contents:
+    blocked:
+      material: PAPER
+      modelData: 10230
+      name: "&r"
+    exit:
+      material: PAPER
+      modelData: 10224
+      name: "&x&E&9&5&1&5&1ออกจากหน้าเมนูนี้"
+    next:
+      material: PAPER
+      modelData: 10219
+      name: "&x&C&E&C&A&3&4หน้าถัดไป >"
+    next-blocked:
+      material: PAPER
+      modelData: 10234
+      name: "&x&C&E&C&A&3&4หน้าถัดไป >"
+    previous:
+      material: PAPER
+      modelData: 10218
+      name: "&x&C&E&C&A&3&4< ย้อนกลับ"
+    previous-blocked:
+      material: PAPER
+      modelData: 10233
+      name: "&x&C&E&C&A&3&4< ย้อนกลับ"
+    info:
+      material: PAPER
+      modelData: 10237
+      name: "&x&C&E&C&A&3&4ข้อเสนอแนะ"
+      lore:
+        - "&7หากคุณมีข้อเสนอแนะเกี่ยวกับระบบนี้"
+        - "&7คุณสามารถติดต่อทีมงานเพื่อให้ปรับเปลี่ยน"
+        - "&7ปรับปรุงหรือแก้ไขได้เสมอหากความคิดเห็นของท่าน"
+        - "&7สามารถนำมาใช้ได้จริงจะมีการให้เครดิตกับท่านด้วย"
+        - "&7"
+        - "&x&F&F&D&9&0&0ติดต่อ : &x&E&6&3&1&5&Dทีมงานสยามคราฟต์"
