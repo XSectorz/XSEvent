@@ -11,11 +11,16 @@ import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.PlayerPointsAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
+
+import static net.xsapi.panat.xsevent.gui.XSEventUI.updateInventory;
 
 
 public final class core extends JavaPlugin {
@@ -31,6 +36,8 @@ public final class core extends JavaPlugin {
     public static Economy econ = null;
     public static PlayerPointsAPI ppAPI = null;
     public static CustomFishing cfAPI = null;
+
+    public static HashMap<UUID, Inventory> pOpenGUI = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -50,6 +57,18 @@ public final class core extends JavaPlugin {
 
         XSEventHandler.loadEvent();
         loadPlayerData();
+        updateInventoryTask();
+    }
+
+    public static void updateInventoryTask() {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                for(Map.Entry<UUID,Inventory> playerOpen : pOpenGUI.entrySet()) {
+                    updateInventory(Bukkit.getPlayer(playerOpen.getKey()));
+                }
+            }
+        }.runTaskTimer(core.getPlugin(), 0L, 20L);
     }
 
     public void loadPlayerData() {

@@ -1,5 +1,7 @@
 package net.xsapi.panat.xsevent.gui;
 
+import net.xsapi.panat.xsevent.configuration.messages;
+import net.xsapi.panat.xsevent.configuration.xsevent;
 import net.xsapi.panat.xsevent.events.handler.XSEventHandler;
 import net.xsapi.panat.xsevent.events.model.utils.XSEventTemplate;
 import net.xsapi.panat.xsevent.player.xsPlayer;
@@ -11,9 +13,10 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class XSEventUI {
 
@@ -34,8 +37,6 @@ public class XSEventUI {
         inventory.setItem(50,Utils.createDecoration("next"));
         inventory.setItem(53,Utils.createDecoration("info"));
 
-        Bukkit.broadcastMessage("TEST COMMIT");
-
         for(int i = 0 ; i < 53 ; i++) {
             if(usedSlot.contains(i)) {
                 continue;
@@ -44,6 +45,23 @@ public class XSEventUI {
             inventory.setItem(i,Utils.createDecoration("blocked"));
         }
 
+
+        if(!core.pOpenGUI.containsKey(p.getUniqueId())) {
+            core.pOpenGUI.put(p.getUniqueId(),inventory);
+        }
+
+        updateInventory(p);
+        p.openInventory(inventory);
+
+    }
+
+    public static void updateInventory(Player p) {
+        Inventory inv = core.pOpenGUI.get(p.getUniqueId());
+        updateInventoryContents(inv,p);
+        p.updateInventory();
+    }
+
+    public static void updateInventoryContents(Inventory inv,Player p) {
         xsPlayer xPlayer = core.XSPlayer.get(p.getUniqueId());
 
 
@@ -60,24 +78,115 @@ public class XSEventUI {
 
             ArrayList<String> lores = new ArrayList<>();
 
-            for(String lore : xsEvt.getIconLore()) {
-                if(lore.contains("%date%")) {
-                    lore = lore.replace("%date%",xsEvt.getDateFormat());
+            SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+            LocalDateTime now = LocalDateTime.now();
+
+            int hours = now.getHour();
+            int minutes = now.getMinute();
+            int seconds = now.getSecond();
+
+            Date currentDate = null;
+            try {
+                currentDate = format.parse(hours+":"+ minutes + ":" + seconds);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+
+            HashMap<String,String> placeholderReplace = new HashMap<>();
+
+            for(Map.Entry<String, String> placeholder : xsEvt.getTimerFormat().entrySet()) {
+                String timeStart = xsevent.customConfig.getString("xsevent.events." + xsEvt.getIDKey() + ".eventTimer." + placeholder.getKey() +".time_to_start");
+
+                try {
+                    Date targetDate = format.parse(timeStart);
+                    //Bukkit.broadcastMessage("targetDate: " + targetDate.getTime());
+                    //Bukkit.broadcastMessage("currentDate: " + currentDate.getTime());
+
+                    long remainingTimeMillis = targetDate.getTime() - currentDate.getTime();
+
+                    if(remainingTimeMillis <= 0) {
+
+                        remainingTimeMillis = Math.abs(remainingTimeMillis);
+
+                        long diffSeconds = (remainingTimeMillis / 1000);
+
+                        //Bukkit.broadcastMessage("DIFF SECS: " + diffSeconds);
+                        //Bukkit.broadcastMessage("TIME TO ALIVE: " + xsEvt.getTimers().get(placeholder.getKey()).getTimeToAlive());
+                        //Bukkit.broadcastMessage("------------");
+
+                        if(diffSeconds >= xsEvt.getTimers().get(placeholder.getKey()).getTimeToAlive()) {
+                            placeholderReplace.put("%count_" + placeholder.getKey() + "%",Utils.replaceColor(messages.customConfig.getString("placeholders.TIME_PASSED")));
+                        } else {
+                            placeholderReplace.put("%count_" + placeholder.getKey() + "%",Utils.replaceColor(Objects.requireNonNull(messages.customConfig.getString("placeholders.TIME_START"))));
+                        }
+                    } else {
+                        long remainingSeconds = remainingTimeMillis / 1000;
+                        long remainingMinutes = remainingSeconds / 60;
+                        long remainingHours = remainingMinutes / 60;
+
+                        remainingSeconds %= 60;
+                        remainingMinutes %= 60;
+
+                        String timer = "";
+
+                        timer += String.valueOf(remainingHours);
+                        timer += " ";
+                        if(remainingHours >= 1) {
+                            timer += messages.customConfig.getString("placeholders.hours");
+                        } else {
+                            timer += messages.customConfig.getString("placeholders.hour");
+                        }
+                        timer += String.valueOf(remainingMinutes);
+                        timer += " ";
+                        if(remainingMinutes >= 1) {
+                            timer += messages.customConfig.getString("placeholders.minutes");
+                        } else {
+                            timer += messages.customConfig.getString("placeholders.minute");
+                        }
+                        timer += String.valueOf(remainingSeconds);
+                        timer += " ";
+                        if(remainingSeconds >= 1) {
+                            timer += messages.customConfig.getString("placeholders.seconds");
+                        } else {
+                            timer += messages.customConfig.getString("placeholders.second");
+                        }
+
+                        placeholderReplace.put("%count_" + placeholder.getKey() + "%",
+                                Utils.replaceColor(messages.customConfig.getString("placeholders.TIME_START_SOON")
+                                        .replace("%time%",timer)));
+                    }
+
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
                 }
+            }
+
+            for(String lore : xsEvt.getIconLore()) {
+
+                lore = lore.replace("%date%",xsEvt.getDateFormat());
+
+                if(lore.contains("%timer_")) {
+                    for(Map.Entry<String, String> placeholder : xsEvt.getTimerFormat().entrySet()) {
+                        lore = lore.replace("%timer_" + placeholder.getKey() + "%",
+                                xsEvt.getTimerFormat().get(placeholder.getKey()));
+                    }
+                }
+                if(lore.contains("%count_")) {
+                    for(Map.Entry<String,String> placeholders : placeholderReplace.entrySet()) {
+                        lore = lore.replace(placeholders.getKey(),placeholders.getValue());
+                    }
+                }
+
                 lores.add(lore);
             }
 
-           // lores.add(xsEvt.getEventDateData().toString());
+            // lores.add(xsEvt.getEventDateData().toString());
 
-            inventory.setItem(evtSlot.get(i),Utils.createItem(xsEvt.getIconMaterial(),
+            inv.setItem(evtSlot.get(i),Utils.createItem(xsEvt.getIconMaterial(),
                     1,xsEvt.getIconModelData(),xsEvt.getIconName(),lores
-            ,xsEvt.getIsIconGlowActivate(),new HashMap<>()));
+                    ,xsEvt.getIsIconGlowActivate(),new HashMap<>()));
 
         }
-
-
-        p.openInventory(inventory);
-
     }
 
 }

@@ -3,6 +3,7 @@ package net.xsapi.panat.xsevent.events.model.utils;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class XSEventTemplate {
 
@@ -13,7 +14,7 @@ public class XSEventTemplate {
     public String iconName;
     public ArrayList<String> iconLore = new ArrayList<>();
     public boolean iconGlowActivate;
-    public ArrayList<XSTimer> timers = new ArrayList<>();
+    public HashMap<String,XSTimer> timers = new HashMap<>();
 
     public XSEventType eventType;
     public String eventDate;
@@ -22,6 +23,16 @@ public class XSEventTemplate {
 
     /* String */
     public String dateFormat;
+    public HashMap<String,String> timerFormat = new HashMap<>();
+
+
+    public void setTimerFormat(HashMap<String, String> timerFormat) {
+        this.timerFormat = timerFormat;
+    }
+
+    public HashMap<String, String> getTimerFormat() {
+        return timerFormat;
+    }
 
     public String getDateFormat() {
         return dateFormat;
@@ -84,11 +95,11 @@ public class XSEventTemplate {
     }
 
 
-    public void setTimers(ArrayList<XSTimer> timers) {
+    public void setTimers(HashMap<String,XSTimer> timers) {
         this.timers = timers;
     }
 
-    public ArrayList<XSTimer> getTimers() {
+    public HashMap<String,XSTimer> getTimers() {
 
         return this.timers;
     }

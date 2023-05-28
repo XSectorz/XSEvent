@@ -6,10 +6,12 @@ import net.xsapi.panat.xsevent.events.model.customfishing.XSCustomFishing;
 import net.xsapi.panat.xsevent.events.model.utils.XSDate;
 import net.xsapi.panat.xsevent.events.model.utils.XSEventTemplate;
 import net.xsapi.panat.xsevent.events.model.utils.XSEventType;
+import net.xsapi.panat.xsevent.events.model.utils.XSTimer;
 import net.xsapi.panat.xsevent.utils.Utils;
 import org.black_ixx.playerpoints.libs.rosegarden.lib.slf4j.helpers.Util;
 import org.bukkit.Bukkit;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -34,7 +36,7 @@ public class XSEventHandler {
 
                 xsCustomFishingEvt.setDateFormat(getDateString(xsCustomFishingEvt.getEventDate()));
                 setDateData(xsCustomFishingEvt);
-
+                setTimerFormat(xsCustomFishingEvt);
                 listEvent.add(xsCustomFishingEvt);
             }
 
@@ -44,6 +46,45 @@ public class XSEventHandler {
 
     public static ArrayList<XSEventTemplate> getListEvent() {
         return listEvent;
+    }
+
+    public static void setTimerFormat(XSEventTemplate XSETemplate) {
+        DecimalFormat df = new DecimalFormat("00");
+        for(String section : xsevent.customConfig.getConfigurationSection("xsevent.events." + XSETemplate.getIDKey() + ".eventTimer").getKeys(false)) {
+
+            String time_start = xsevent.customConfig.getString("xsevent.events." + XSETemplate.getIDKey() + ".eventTimer." + section +".time_to_start");
+            int time_alive = xsevent.customConfig.getInt("xsevent.events." + XSETemplate.getIDKey() + ".eventTimer." + section +".time_to_alive");
+
+            XSTimer xsTimer = new XSTimer(time_start,time_alive);
+            XSETemplate.getTimers().put(section,xsTimer);
+
+            Bukkit.broadcastMessage("SECTION: " + section + " time_start: " + time_start + " time_alive: " + time_alive);
+
+            int hours = time_alive / 3600;
+            int minutes = (time_alive % 3600) / 60;
+            int seconds = (time_alive % 3600) % 60;
+
+            int timeH = Integer.parseInt(time_start.split(":")[0]) + hours;
+            int timeM = Integer.parseInt(time_start.split(":")[1]) + minutes;
+            int timeS = Integer.parseInt(time_start.split(":")[2]) + seconds;
+
+            if(timeS >= 60) {
+                timeS -= 60;
+                timeM +=1;
+            }
+            if(timeM >= 60) {
+                timeM -= 60;
+                timeH += 1;
+            }
+            if(timeH >= 24) {
+                timeH -= 24;
+            }
+
+            XSETemplate.getTimerFormat().put(
+                    section,
+                    time_start + "-" +
+                    df.format(timeH)+":"+df.format(timeM)+":"+df.format(timeS));
+        }
     }
 
     public static void setDateData(XSEventTemplate XSETemplate) {

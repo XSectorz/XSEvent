@@ -7,3 +7,13 @@ dates:
   SATURDAY: "&x&D&A&7&E&8&Dวันเสาร์"
   SUNDAY: "&x&D&A&7&E&8&Dวันอาทิตย์"
   EVERY_DAY: "&x&D&A&7&E&8&Dทุกวัน"
+placeholders:
+  TIME_PASSED: "&x&F&0&1&8&1&8กิจกรรมเวลาดังกล่าวสิ้นสุดไปแล้ว"
+  TIME_START: "&x&4&7&F&0&1&8กำลังดำเนินกิจกรรม"
+  TIME_START_SOON: "&x&F&0&E&A&1&8กรุณารออีก %time%"
+  hours: "ชั่วโมง "
+  hour: "ชั่วโมง "
+  minutes: "นาที "
+  minute: "นาที "
+  seconds: "วินาที "
+  second: "วินาที "
