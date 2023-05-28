@@ -5,6 +5,8 @@ import net.momirealms.customfishing.CustomFishing;
 import net.xsapi.panat.xsevent.command.commandsLoader;
 import net.xsapi.panat.xsevent.configuration.configLoader;
 import net.xsapi.panat.xsevent.events.handler.XSEventHandler;
+import net.xsapi.panat.xsevent.events.model.utils.XSEventTemplate;
+import net.xsapi.panat.xsevent.events.model.utils.XSTimer;
 import net.xsapi.panat.xsevent.listeners.XS_EventLoader;
 import net.xsapi.panat.xsevent.player.xsPlayer;
 import org.black_ixx.playerpoints.PlayerPoints;
@@ -16,6 +18,10 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -58,6 +64,7 @@ public final class core extends JavaPlugin {
         XSEventHandler.loadEvent();
         loadPlayerData();
         updateInventoryTask();
+        checkEventTask();
     }
 
     public static void updateInventoryTask() {
@@ -71,10 +78,47 @@ public final class core extends JavaPlugin {
         }.runTaskTimer(core.getPlugin(), 0L, 20L);
     }
 
+    public static void checkEventTask() {
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                LocalTime current = LocalTime.now();
+
+                for(XSEventTemplate xsEvt : XSEventHandler.getListEvent()) {
+                    if(!xsEvt.getEventDateData().contains(XSEventHandler.dateInRealLife.get(new Date().getDay()))) {
+                        continue;
+                    }
+                        for(Map.Entry<String, XSTimer> xsTimer : xsEvt.getTimers().entrySet()) {
+
+                        LocalTime targetStartTime = LocalTime.parse(xsTimer.getValue().getStartTimer());
+                        LocalTime targetEndTime = LocalTime.parse(xsTimer.getValue().getEndTimer());
+
+                        if(current.getHour() == targetStartTime.getHour() &&
+                        current.getMinute() == targetStartTime.getMinute() &&
+                        current.getSecond() == targetStartTime.getSecond()) {
+                            for(String cmd : xsEvt.getEvtTrigger().getStartTrigger()) {
+                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(),cmd);
+                            }
+                        }
+                        if(current.getHour() == targetEndTime.getHour() &&
+                                current.getMinute() == targetEndTime.getMinute() &&
+                                current.getSecond() == targetEndTime.getSecond()) {
+                            for(String cmd : xsEvt.getEvtTrigger().getEndTrigger()) {
+                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(),cmd);
+                            }
+                        }
+                    }
+                }
+            }
+        }.runTaskTimer(core.getPlugin(), 0L, 20L);
+    }
+
     public void loadPlayerData() {
         for(Player p : Bukkit.getOnlinePlayers()) {
-            xsPlayer xPlayer = new xsPlayer(p);
+            p.closeInventory();
 
+            xsPlayer xPlayer = new xsPlayer(p);
             core.XSPlayer.put(p.getUniqueId(),xPlayer);
         }
     }

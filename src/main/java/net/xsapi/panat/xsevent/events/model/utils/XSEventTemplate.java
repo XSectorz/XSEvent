@@ -90,10 +90,19 @@ public class XSEventTemplate {
         this.iconName = iconName;
     }
 
-    public void setIconModelData(int iconmodelData) {
-        this.iconmodelData = iconmodelData;
+    public void setIconModelData(int iconModelData) {
+        this.iconmodelData = iconModelData;
     }
 
+    public XSEventTrigger evtTrigger;
+
+    public XSEventTrigger getEvtTrigger() {
+        return evtTrigger;
+    }
+
+    public void setEvtTrigger(XSEventTrigger evtTrigger) {
+        this.evtTrigger = evtTrigger;
+    }
 
     public void setTimers(HashMap<String,XSTimer> timers) {
         this.timers = timers;

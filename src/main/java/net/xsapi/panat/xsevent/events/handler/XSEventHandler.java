@@ -3,10 +3,7 @@ package net.xsapi.panat.xsevent.events.handler;
 import net.xsapi.panat.xsevent.configuration.messages;
 import net.xsapi.panat.xsevent.configuration.xsevent;
 import net.xsapi.panat.xsevent.events.model.customfishing.XSCustomFishing;
-import net.xsapi.panat.xsevent.events.model.utils.XSDate;
-import net.xsapi.panat.xsevent.events.model.utils.XSEventTemplate;
-import net.xsapi.panat.xsevent.events.model.utils.XSEventType;
-import net.xsapi.panat.xsevent.events.model.utils.XSTimer;
+import net.xsapi.panat.xsevent.events.model.utils.*;
 import net.xsapi.panat.xsevent.utils.Utils;
 import org.black_ixx.playerpoints.libs.rosegarden.lib.slf4j.helpers.Util;
 import org.bukkit.Bukkit;
@@ -21,15 +18,16 @@ public class XSEventHandler {
 
     public static ArrayList<String> dateData = new ArrayList<>(Arrays.asList("MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY","SUNDAY","EVERY_DAY"));
 
+    public static ArrayList<String> dateInRealLife = new ArrayList<>(Arrays.asList("SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY"));
+
     public static void loadEvent() {
 
-        Bukkit.broadcastMessage("START LOAD");
+        //Bukkit.broadcastMessage("START LOAD");
 
         for(String section : xsevent.customConfig.getConfigurationSection("xsevent.events").getKeys(false)) {
 
             XSEventType evtType = XSEventType.valueOf(xsevent.customConfig.getString("xsevent.events." + section + ".eventType"));
-            Bukkit.broadcastMessage( section + " : " + evtType.toString());
-
+            //Bukkit.broadcastMessage( section + " : " + evtType.toString());
 
             if(evtType.equals(XSEventType.CUSTOM_FISHING)) {
                 XSCustomFishing xsCustomFishingEvt = new XSCustomFishing(section);
@@ -37,6 +35,7 @@ public class XSEventHandler {
                 xsCustomFishingEvt.setDateFormat(getDateString(xsCustomFishingEvt.getEventDate()));
                 setDateData(xsCustomFishingEvt);
                 setTimerFormat(xsCustomFishingEvt);
+                setEventTrigger(xsCustomFishingEvt);
                 listEvent.add(xsCustomFishingEvt);
             }
 
@@ -48,6 +47,25 @@ public class XSEventHandler {
         return listEvent;
     }
 
+    public static void setEventTrigger(XSEventTemplate XSETemplate) {
+
+        ArrayList<String> start = new ArrayList<>();
+        ArrayList<String> end = new ArrayList<>();
+
+        for(String section : xsevent.customConfig.getConfigurationSection("xsevent.events." + XSETemplate.getIDKey() + ".eventTrigger").getKeys(false)) {
+            for(String cmd : xsevent.customConfig.getStringList("xsevent.events." + XSETemplate.getIDKey() + ".eventTrigger." + section + ".commands")) {
+                if(section.equals("start")) {
+                    start.add(cmd);
+                } else {
+                    end.add(cmd);
+                }
+            }
+        }
+
+        XSEventTrigger xsEventTrigger = new XSEventTrigger(start,end);
+        XSETemplate.setEvtTrigger(xsEventTrigger);
+    }
+
     public static void setTimerFormat(XSEventTemplate XSETemplate) {
         DecimalFormat df = new DecimalFormat("00");
         for(String section : xsevent.customConfig.getConfigurationSection("xsevent.events." + XSETemplate.getIDKey() + ".eventTimer").getKeys(false)) {
@@ -55,10 +73,8 @@ public class XSEventHandler {
             String time_start = xsevent.customConfig.getString("xsevent.events." + XSETemplate.getIDKey() + ".eventTimer." + section +".time_to_start");
             int time_alive = xsevent.customConfig.getInt("xsevent.events." + XSETemplate.getIDKey() + ".eventTimer." + section +".time_to_alive");
 
-            XSTimer xsTimer = new XSTimer(time_start,time_alive);
-            XSETemplate.getTimers().put(section,xsTimer);
 
-            Bukkit.broadcastMessage("SECTION: " + section + " time_start: " + time_start + " time_alive: " + time_alive);
+            //Bukkit.broadcastMessage("SECTION: " + section + " time_start: " + time_start + " time_alive: " + time_alive);
 
             int hours = time_alive / 3600;
             int minutes = (time_alive % 3600) / 60;
@@ -84,6 +100,9 @@ public class XSEventHandler {
                     section,
                     time_start + "-" +
                     df.format(timeH)+":"+df.format(timeM)+":"+df.format(timeS));
+
+            XSTimer xsTimer = new XSTimer(time_start,time_alive,df.format(timeH)+":"+df.format(timeM)+":"+df.format(timeS));
+            XSETemplate.getTimers().put(section,xsTimer);
         }
     }
 

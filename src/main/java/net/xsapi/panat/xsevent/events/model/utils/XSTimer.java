@@ -5,9 +5,12 @@ public class XSTimer {
     public String startTimer; //Format = "xx:xx:xx"
     public int timeToAlive; //In Secs
 
-    public XSTimer(String startTimer,int timeToAlive) {
+    public String endTimer; //Format = "xx:xx:xx"
+
+    public XSTimer(String startTimer,int timeToAlive,String endTimer) {
         this.startTimer = startTimer;
         this.timeToAlive = timeToAlive;
+        this.endTimer = endTimer;
     }
 
     public String getStartTimer() {
@@ -18,4 +21,7 @@ public class XSTimer {
         return this.timeToAlive;
     }
 
+    public String getEndTimer() {
+        return endTimer;
+    }
 }

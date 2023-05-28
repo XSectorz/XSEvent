@@ -102,6 +102,11 @@ public class XSEventUI {
                     //Bukkit.broadcastMessage("targetDate: " + targetDate.getTime());
                     //Bukkit.broadcastMessage("currentDate: " + currentDate.getTime());
 
+                    if(!xsEvt.getEventDateData().contains(XSEventHandler.dateInRealLife.get(new Date().getDay()))) {
+                        placeholderReplace.put("%count_" + placeholder.getKey() + "%",Utils.replaceColor(Objects.requireNonNull(messages.customConfig.getString("placeholders.TIME_PASSED"))));
+                        continue;
+                    }
+
                     long remainingTimeMillis = targetDate.getTime() - currentDate.getTime();
 
                     if(remainingTimeMillis <= 0) {

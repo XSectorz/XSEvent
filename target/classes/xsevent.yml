@@ -19,7 +19,7 @@ xsevent:
           - "%xsevent_siam_fishing_event%"
         isGlowWhenActivate: true #เรืองแสงเมื่อถึงช่วงอีเวนต์
       eventType: CUSTOM_FISHING
-      eventRepeat: MONDAY,WEDNESDAY,FRIDAY-SUNDAY
+      eventRepeat: MONDAY,WEDNESDAY-FRIDAY,SUNDAY
       eventTimer:
         round_1:
           time_to_start: "09:00:00" #ในเวลาประเทศไทย
@@ -28,15 +28,15 @@ xsevent:
           time_to_start: "15:00:00" #ในเวลาประเทศไทย
           time_to_alive: 1800 #ในหน่วยวินาที
         round_3:
-          time_to_start: "21:00:00" #ในเวลาประเทศไทย
-          time_to_alive: 900 #ในหน่วยวินาที
+          time_to_start: "16:06:00" #ในเวลาประเทศไทย
+          time_to_alive: 25 #ในหน่วยวินาที
       eventTrigger:
         start:
           commands:
-            - "customfishing competition start example"
+            - "broadcast SIAMFISH START"
         end:
           commands:
-            - "customfishing competition end"
+            - "broadcast SIAMFISH END"
       event_rewards:
         prize:
           1_prize:
