@@ -34,6 +34,7 @@ public class XSEventHandler {
 
                 xsCustomFishingEvt.setDateFormat(getDateString(xsCustomFishingEvt.getEventDate()));
                 setDateData(xsCustomFishingEvt);
+                setEventType(xsCustomFishingEvt);
                 setTimerFormat(xsCustomFishingEvt);
                 setEventTrigger(xsCustomFishingEvt);
                 listEvent.add(xsCustomFishingEvt);
@@ -45,6 +46,10 @@ public class XSEventHandler {
 
     public static ArrayList<XSEventTemplate> getListEvent() {
         return listEvent;
+    }
+
+    public static void setEventType(XSEventTemplate XSETemplate) {
+        XSETemplate.setEventType(XSEventType.valueOf(xsevent.customConfig.getString("xsevent.events." + XSETemplate.getIDKey() + ".eventType")));
     }
 
     public static void setEventTrigger(XSEventTemplate XSETemplate) {

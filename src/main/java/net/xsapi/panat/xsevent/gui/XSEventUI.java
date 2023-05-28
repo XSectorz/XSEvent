@@ -4,6 +4,7 @@ import net.xsapi.panat.xsevent.configuration.messages;
 import net.xsapi.panat.xsevent.configuration.xsevent;
 import net.xsapi.panat.xsevent.events.handler.XSEventHandler;
 import net.xsapi.panat.xsevent.events.model.utils.XSEventTemplate;
+import net.xsapi.panat.xsevent.events.model.utils.XSScore;
 import net.xsapi.panat.xsevent.player.xsPlayer;
 import net.xsapi.panat.xsevent.configuration.config;
 import net.xsapi.panat.xsevent.core.core;
@@ -13,6 +14,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -166,6 +168,8 @@ public class XSEventUI {
                 }
             }
 
+            DecimalFormat df = new DecimalFormat(".#");
+
             for(String lore : xsEvt.getIconLore()) {
 
                 lore = lore.replace("%date%",xsEvt.getDateFormat());
@@ -179,6 +183,26 @@ public class XSEventUI {
                 if(lore.contains("%count_")) {
                     for(Map.Entry<String,String> placeholders : placeholderReplace.entrySet()) {
                         lore = lore.replace(placeholders.getKey(),placeholders.getValue());
+                    }
+                }
+
+                if(lore.contains("%xsevent_")) {
+
+                    if(!xsEvt.isStart()) {
+                        continue;
+                    } else {
+
+                        String score = "";
+
+                        if(!xsEvt.getScoreList().containsKey(p.getUniqueId())) {
+                            score = "-";
+                        } else {
+                            score += df.format(xsEvt.getScoreList().get(p.getUniqueId()).getScore());
+                        }
+
+                        lore = lore.replace("%xsevent_" + xsEvt.getIDKey() + "%",
+                                Utils.replaceColor(messages.customConfig.getString("placeholders.score_replace")
+                                        .replace("%xs_point%",score)));
                     }
                 }
 

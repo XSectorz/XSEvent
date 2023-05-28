@@ -97,6 +97,7 @@ public final class core extends JavaPlugin {
                         if(current.getHour() == targetStartTime.getHour() &&
                         current.getMinute() == targetStartTime.getMinute() &&
                         current.getSecond() == targetStartTime.getSecond()) {
+                            xsEvt.setStart(true);
                             for(String cmd : xsEvt.getEvtTrigger().getStartTrigger()) {
                                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(),cmd);
                             }
@@ -104,6 +105,8 @@ public final class core extends JavaPlugin {
                         if(current.getHour() == targetEndTime.getHour() &&
                                 current.getMinute() == targetEndTime.getMinute() &&
                                 current.getSecond() == targetEndTime.getSecond()) {
+                            xsEvt.setStart(false);
+                            xsEvt.onEventEnd();
                             for(String cmd : xsEvt.getEvtTrigger().getEndTrigger()) {
                                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(),cmd);
                             }

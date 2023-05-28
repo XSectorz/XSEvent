@@ -17,3 +17,4 @@ placeholders:
   minute: "นาที "
   seconds: "วินาที "
   second: "วินาที "
+  score_replace: "&x&A&9&D&B&8&Fคะแนนของคุณตอนนี้ : &x&C&5&B&0&3&3&l%xs_point%"

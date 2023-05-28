@@ -1,13 +1,15 @@
 package net.xsapi.panat.xsevent.events.model.utils;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 public class XSEventTemplate {
 
     public String IDKey;
+
+    public boolean isStart;
 
     public Material iconMaterial;
     public int iconmodelData;
@@ -20,14 +22,24 @@ public class XSEventTemplate {
     public String eventDate;
     public ArrayList<String> eventDateData = new ArrayList<>();
 
+    public HashMap<UUID,XSScore> scoreList = new HashMap<>();
 
     /* String */
     public String dateFormat;
     public HashMap<String,String> timerFormat = new HashMap<>();
 
 
-    public void setTimerFormat(HashMap<String, String> timerFormat) {
-        this.timerFormat = timerFormat;
+    public HashMap<UUID, XSScore> getScoreList() {
+        return scoreList;
+    }
+
+
+    public void setStart(boolean start) {
+        isStart = start;
+    }
+
+    public boolean isStart() {
+        return isStart;
     }
 
     public HashMap<String, String> getTimerFormat() {
@@ -104,10 +116,6 @@ public class XSEventTemplate {
         this.evtTrigger = evtTrigger;
     }
 
-    public void setTimers(HashMap<String,XSTimer> timers) {
-        this.timers = timers;
-    }
-
     public HashMap<String,XSTimer> getTimers() {
 
         return this.timers;
@@ -131,5 +139,27 @@ public class XSEventTemplate {
 
     public boolean getIsIconGlowActivate() {
         return iconGlowActivate;
+    }
+
+
+    public void onEventEnd() {
+
+        ArrayList<Map.Entry<UUID, XSScore>> entries = new ArrayList<>(scoreList.entrySet());
+
+        Collections.sort(entries, new Comparator<Map.Entry<UUID, XSScore>>() {
+            @Override
+            public int compare(Map.Entry<UUID, XSScore> entry1, Map.Entry<UUID, XSScore> entry2) {
+                double score1 = entry1.getValue().score;
+                double score2 = entry2.getValue().score;
+
+                return Double.compare(score2, score1);
+            }
+        });
+
+        for(Map.Entry<UUID,XSScore> entry : entries) {
+            Bukkit.broadcastMessage("Player: " + entry.getValue().getPlayer().getName() + ", Score: " + entry.getValue().getScore());
+        }
+
+
     }
 }
