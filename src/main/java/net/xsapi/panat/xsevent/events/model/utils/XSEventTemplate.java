@@ -267,12 +267,20 @@ public class XSEventTemplate {
             Player p = entry.getValue().getPlayer();
             //Bukkit.broadcastMessage("Player: " + p.getName() + ", Score: " + entry.getValue().getScore());
 
-            for(String rewardList : this.getRewards().getRewardsList().get(rank)) {
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(),rewardList.replace("%player%", p.getName()
-                        ));
+            if(rank > this.getRewards().getRewardsList().size()) {
+                for (String rewardList : this.getRewards().getParticipantsRewards()) {
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(),rewardList.replace("%player%", p.getName()
+                    ));
+                }
+            } else {
+                for(String rewardList : this.getRewards().getRewardsList().get(rank)) {
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(),rewardList.replace("%player%", p.getName()
+                    ));
+                }
             }
             rank += 1;
 
         }
+
     }
 }

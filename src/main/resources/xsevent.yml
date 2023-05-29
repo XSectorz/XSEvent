@@ -79,3 +79,6 @@ xsevent:
           2-5_prize:
             commands:
               - "broadcast %player% got 2-5!"
+        participants:
+          prize:
+            - "broadcast %player% come to join competition!"

@@ -83,6 +83,12 @@ public class XSEventHandler {
             }
         }
 
+        ArrayList<String> cmd = new ArrayList<>(
+                xsevent.customConfig.getStringList("xsevent.events." + XSETemplate.getIDKey() + ".event_rewards.participants.prize")
+        );
+
+        xsRewards.setParticipantsRewards(cmd);
+
         XSETemplate.setRewards(xsRewards);
 
     }
