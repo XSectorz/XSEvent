@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 
 public class XSEventHandler {
 
@@ -37,6 +38,7 @@ public class XSEventHandler {
                 setEventType(xsCustomFishingEvt);
                 setTimerFormat(xsCustomFishingEvt);
                 setEventTrigger(xsCustomFishingEvt);
+                setReward(xsCustomFishingEvt);
                 listEvent.add(xsCustomFishingEvt);
             }
 
@@ -46,6 +48,35 @@ public class XSEventHandler {
 
     public static ArrayList<XSEventTemplate> getListEvent() {
         return listEvent;
+    }
+
+    public static void setReward(XSEventTemplate XSETemplate) {
+
+        XSRewards xsRewards = new XSRewards();
+
+        for(String section : xsevent.customConfig.getConfigurationSection("xsevent.events." + XSETemplate.getIDKey() + ".event_rewards.prize").getKeys(false)) {
+            String ranking = section.split("_")[0];
+            ArrayList<String> cmd = new ArrayList<>(
+                    xsevent.customConfig.getStringList("xsevent.events." + XSETemplate.getIDKey() + ".event_rewards.prize." + section + ".commands")
+            );
+
+            if(ranking.split("-").length == 2) {
+
+                int start = Integer.parseInt(ranking.split("-")[0]);
+                int end = Integer.parseInt(ranking.split("-")[1]);
+
+                for(int i = start ; i <= end ; i++) {
+                    xsRewards.getRewardsList().put(i,cmd);
+                }
+
+            } else {
+
+                xsRewards.getRewardsList().put(Integer.parseInt(ranking),cmd);
+            }
+        }
+
+        XSETemplate.setRewards(xsRewards);
+
     }
 
     public static void setEventType(XSEventTemplate XSETemplate) {

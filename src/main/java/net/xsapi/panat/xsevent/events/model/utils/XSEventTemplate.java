@@ -2,6 +2,7 @@ package net.xsapi.panat.xsevent.events.model.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 
 import java.util.*;
 
@@ -24,10 +25,20 @@ public class XSEventTemplate {
 
     public HashMap<UUID,XSScore> scoreList = new HashMap<>();
 
+    public XSRewards rewards;
+
     /* String */
     public String dateFormat;
     public HashMap<String,String> timerFormat = new HashMap<>();
 
+
+    public void setRewards(XSRewards rewards) {
+        this.rewards = rewards;
+    }
+
+    public XSRewards getRewards() {
+        return rewards;
+    }
 
     public HashMap<UUID, XSScore> getScoreList() {
         return scoreList;
@@ -156,10 +167,23 @@ public class XSEventTemplate {
             }
         });
 
-        for(Map.Entry<UUID,XSScore> entry : entries) {
-            Bukkit.broadcastMessage("Player: " + entry.getValue().getPlayer().getName() + ", Score: " + entry.getValue().getScore());
+        sendRewards(entries);
+    }
+
+    public void sendRewards(ArrayList<Map.Entry<UUID,XSScore>> ranking) {
+
+        int rank = 1;
+
+        for(Map.Entry<UUID,XSScore> entry : ranking) {
+            Player p = entry.getValue().getPlayer();
+            //Bukkit.broadcastMessage("Player: " + p.getName() + ", Score: " + entry.getValue().getScore());
+
+            for(String rewardList : this.getRewards().getRewardsList().get(rank)) {
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(),rewardList.replace("%player%", p.getName()
+                        ));
+            }
+            rank += 1;
+
         }
-
-
     }
 }
