@@ -28,7 +28,7 @@ xsevent:
           time_to_start: "11:52:00" #ในเวลาประเทศไทย
           time_to_alive: 120 #ในหน่วยวินาที
         round_3:
-          time_to_start: "16:06:00" #ในเวลาประเทศไทย
+          time_to_start: "14:11:30" #ในเวลาประเทศไทย
           time_to_alive: 25 #ในหน่วยวินาที
       eventTrigger:
         start:

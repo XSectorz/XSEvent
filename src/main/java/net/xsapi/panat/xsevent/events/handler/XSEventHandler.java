@@ -38,6 +38,7 @@ public class XSEventHandler {
                 setEventType(xsCustomFishingEvt);
                 setTimerFormat(xsCustomFishingEvt);
                 setEventTrigger(xsCustomFishingEvt);
+                setGlowActive(xsCustomFishingEvt);
                 setReward(xsCustomFishingEvt);
                 listEvent.add(xsCustomFishingEvt);
             }
@@ -48,6 +49,11 @@ public class XSEventHandler {
 
     public static ArrayList<XSEventTemplate> getListEvent() {
         return listEvent;
+    }
+
+    public static void setGlowActive(XSEventTemplate XSETemplate) {
+        XSETemplate.setIconGlowActivate(xsevent.customConfig.getBoolean("xsevent.events."
+        +XSETemplate.getIDKey()+".icon.isGlowWhenActivate"));
     }
 
     public static void setReward(XSEventTemplate XSETemplate) {

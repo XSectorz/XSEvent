@@ -96,6 +96,12 @@ public class XSEventUI {
 
             XSEventTemplate xsEvt = XSEventHandler.getListEvent().get(index+i);
 
+            boolean isGlow = false;
+
+            if(xsEvt.isStart()) {
+                isGlow = xsEvt.getIsIconGlowActivate();
+            }
+
             ArrayList<String> lores = new ArrayList<>();
 
             SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
@@ -233,7 +239,7 @@ public class XSEventUI {
 
             inv.setItem(evtSlot.get(i),Utils.createItem(xsEvt.getIconMaterial(),
                     1,xsEvt.getIconModelData(),xsEvt.getIconName(),lores
-                    ,xsEvt.getIsIconGlowActivate(),new HashMap<>()));
+                    ,isGlow,new HashMap<>()));
 
         }
     }
