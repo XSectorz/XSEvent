@@ -36,26 +36,6 @@ public class XSEventUI {
             p.playSound(p.getLocation(), Sound.valueOf(config.customConfig.getString("gui.sound.type")),1.0f,1.0f);
         }
 
-        xsPlayer xPlayer = core.XSPlayer.get(p.getUniqueId());
-
-        if(xPlayer.getEvtPage() > 1) {
-            inventory.setItem(48,Utils.createDecoration("previous"));
-        } else {
-            inventory.setItem(48,Utils.createDecoration("previous-blocked"));
-        }
-
-        int index = (8  * (xPlayer.getEvtPage()-1));
-
-        if(XSEventHandler.getListEvent().size() >= (index+8)) {
-            inventory.setItem(50,Utils.createDecoration("next"));
-        } else {
-            inventory.setItem(50,Utils.createDecoration("next-blocked"));
-        }
-
-        inventory.setItem(49,Utils.createDecoration("exit"));
-
-        inventory.setItem(53,Utils.createDecoration("info"));
-
         for(int i = 0 ; i < 53 ; i++) {
             if(usedSlot.contains(i)) {
                 continue;
@@ -64,13 +44,13 @@ public class XSEventUI {
             inventory.setItem(i,Utils.createDecoration("blocked"));
         }
 
+        core.XSPlayer.get(p.getUniqueId()).setEvtPage(1);
 
         if(!core.pOpenGUI.containsKey(p.getUniqueId())) {
             core.pOpenGUI.put(p.getUniqueId(),inventory);
         }
 
         inventory.setItem(49,Utils.createDecoration("exit"));
-
         inventory.setItem(53,Utils.createDecoration("info"));
 
         updateInventory(p);
