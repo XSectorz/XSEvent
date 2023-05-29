@@ -25,6 +25,8 @@ public class XSEventHandler {
 
         //Bukkit.broadcastMessage("START LOAD");
 
+        listEvent.clear();
+
         for(String section : xsevent.customConfig.getConfigurationSection("xsevent.events").getKeys(false)) {
 
             XSEventType evtType = XSEventType.valueOf(xsevent.customConfig.getString("xsevent.events." + section + ".eventType"));
