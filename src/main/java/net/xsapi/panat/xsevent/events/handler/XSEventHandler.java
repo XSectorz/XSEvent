@@ -5,13 +5,10 @@ import net.xsapi.panat.xsevent.configuration.xsevent;
 import net.xsapi.panat.xsevent.events.model.customfishing.XSCustomFishing;
 import net.xsapi.panat.xsevent.events.model.utils.*;
 import net.xsapi.panat.xsevent.utils.Utils;
-import org.black_ixx.playerpoints.libs.rosegarden.lib.slf4j.helpers.Util;
-import org.bukkit.Bukkit;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
 
 public class XSEventHandler {
 
