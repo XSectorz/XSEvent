@@ -18,3 +18,10 @@ placeholders:
   seconds: "วินาที "
   second: "วินาที "
   score_replace: "&x&A&9&D&B&8&Fคะแนนของคุณตอนนี้ : &x&C&5&B&0&3&3&l%xs_point%"
+  no_players: "&x&E&6&2&D&4&Bไม่พบข้อมูลผู้เล่น"
+  no_score: "&x&E&6&2&D&4&B-"
+messages:
+  prefix: "&x&d&4&a&a&3&d&lXSEVENT &8&l» "
+  no_permission: "<prefix> &x&d&4&5&9&5&9คุณไม่มีสิทธิในการใช้งานคำสั่งดังกล่าว"
+  no_command: "<prefix> &x&d&4&5&9&5&9ไม่พบคำสั่งดังกล่าว"
+  reload: "<prefix> &x&7&7&d&4&7&5ทำการรีโหลดระบบเรียบร้อยแล้ว"

@@ -9,6 +9,7 @@ import net.xsapi.panat.xsevent.events.model.utils.XSEventTemplate;
 import net.xsapi.panat.xsevent.events.model.utils.XSTimer;
 import net.xsapi.panat.xsevent.listeners.XS_EventLoader;
 import net.xsapi.panat.xsevent.player.xsPlayer;
+import net.xsapi.panat.xsevent.utils.Utils;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.PlayerPointsAPI;
 import org.bukkit.Bukkit;
@@ -25,6 +26,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static net.xsapi.panat.xsevent.gui.XSEventUI.updateInventory;
 
@@ -100,6 +103,11 @@ public final class core extends JavaPlugin {
                         current.getMinute() == targetStartTime.getMinute() &&
                         current.getSecond() == targetStartTime.getSecond()) {
                             xsEvt.setStart(true);
+
+                            for (String text : xsEvt.getEvtTrigger().getStartBoardcast()) {
+                                Bukkit.broadcastMessage(Utils.replaceColor(text));
+                            }
+
                             for(String cmd : xsEvt.getEvtTrigger().getStartTrigger()) {
                                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(),cmd);
                             }
@@ -108,6 +116,7 @@ public final class core extends JavaPlugin {
                                 current.getMinute() == targetEndTime.getMinute() &&
                                 current.getSecond() == targetEndTime.getSecond()) {
                             xsEvt.setStart(false);
+
                             xsEvt.onEventEnd();
                             for(String cmd : xsEvt.getEvtTrigger().getEndTrigger()) {
                                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(),cmd);

@@ -1,10 +1,14 @@
 package net.xsapi.panat.xsevent.events.model.utils;
 
+import net.xsapi.panat.xsevent.configuration.messages;
+import net.xsapi.panat.xsevent.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class XSEventTemplate {
 
@@ -206,7 +210,53 @@ public class XSEventTemplate {
             }
         });
 
+        endBoardcast(entries);
         sendRewards(entries);
+    }
+
+    public void endBoardcast(ArrayList<Map.Entry<UUID,XSScore>> ranking) {
+
+        for (String text : this.getEvtTrigger().getEndBoardcast()) {
+
+            if(text.contains("%xsevent_top")) {
+                String regex = "%xsevent_top_(\\d+)%";
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(text);
+
+                if(matcher.find()) {
+                    String match = matcher.group(1);
+                    int rank = Integer.parseInt(match);
+
+                    if(ranking.size() < rank) {
+                        text = text.replace("%xsevent_top_" + match + "%",
+                                messages.customConfig.getString("placeholders.no_players"));
+                    } else {
+                        text = text.replace("%xsevent_top_" + match + "%",
+                                ranking.get(rank-1).getValue().getPlayer().getName());
+                    }
+                }
+            }
+            if(text.contains("%xsevent_top_score_")) {
+                String regex = "%xsevent_top_score_(\\d+)%";
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(text);
+
+                if(matcher.find()) {
+                    String match = matcher.group(1);
+                    int rank = Integer.parseInt(match);
+
+                    if(ranking.size() < rank) {
+                        text = text.replace("%xsevent_top_score_" + match + "%",
+                                messages.customConfig.getString("placeholders.no_score"));
+                    } else {
+                        text = text.replace("%xsevent_top_score_" + match + "%",
+                                ranking.get(rank-1).getValue().getScore()+"");
+                    }
+                }
+            }
+
+            Bukkit.broadcastMessage(Utils.replaceColor(text));
+        }
     }
 
     public void sendRewards(ArrayList<Map.Entry<UUID,XSScore>> ranking) {

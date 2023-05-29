@@ -106,7 +106,11 @@ public class XSEventHandler {
             }
         }
 
-        XSEventTrigger xsEventTrigger = new XSEventTrigger(start,end);
+        XSEventTrigger xsEventTrigger = new XSEventTrigger(start,end
+        ,new ArrayList<>(xsevent.customConfig.getStringList("xsevent.events."
+        + XSETemplate.getIDKey() + ".eventTrigger.start.broadcast")),
+                new ArrayList<>(xsevent.customConfig.getStringList("xsevent.events."
+                        + XSETemplate.getIDKey() + ".eventTrigger.end.broadcast")));
         XSETemplate.setEvtTrigger(xsEventTrigger);
     }
 
