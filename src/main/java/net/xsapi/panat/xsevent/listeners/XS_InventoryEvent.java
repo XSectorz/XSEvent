@@ -27,14 +27,16 @@ public class XS_InventoryEvent implements Listener {
 
                 int realIndex = (xPlayer.getEvtPage()-1)*8 + index;
 
-                String key = XSEventHandler.getListEvent().get(realIndex).getIDKey();
+                if (realIndex < XSEventHandler.getListEvent().size()) {
+                    String key = XSEventHandler.getListEvent().get(realIndex).getIDKey();
 
-                if(!xPlayer.getClickInfo().containsKey(key)) {
-                    xPlayer.getClickInfo().put(key,true);
-                } else {
-                    xPlayer.getClickInfo().replace(key,!xPlayer.getClickInfo().get(key));
+                    if(!xPlayer.getClickInfo().containsKey(key)) {
+                        xPlayer.getClickInfo().put(key,true);
+                    } else {
+                        xPlayer.getClickInfo().replace(key,!xPlayer.getClickInfo().get(key));
+                    }
+                    XSEventUI.updateInventory(p);
                 }
-                XSEventUI.updateInventory(p);
             }
 
             if(e.getSlot() == 48) {
