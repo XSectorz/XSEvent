@@ -21,6 +21,22 @@ public class XS_InventoryEvent implements Listener {
 
             xsPlayer xPlayer = core.XSPlayer.get(p.getUniqueId());
 
+            if(XSEventUI.evtSlot.contains(e.getSlot())) {
+
+                int index = XSEventUI.evtSlot.indexOf(e.getSlot());
+
+                int realIndex = (xPlayer.getEvtPage()-1)*8 + index;
+
+                String key = XSEventHandler.getListEvent().get(realIndex).getIDKey();
+
+                if(!xPlayer.getClickInfo().containsKey(key)) {
+                    xPlayer.getClickInfo().put(key,true);
+                } else {
+                    xPlayer.getClickInfo().replace(key,!xPlayer.getClickInfo().get(key));
+                }
+                XSEventUI.updateInventory(p);
+            }
+
             if(e.getSlot() == 48) {
                 if(xPlayer.getEvtPage() != 1) {
                     xPlayer.removeEvtPage(1);

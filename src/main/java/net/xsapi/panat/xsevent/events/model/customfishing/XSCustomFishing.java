@@ -18,6 +18,12 @@ public class XSCustomFishing extends XSEventTemplate {
         this.setIconModelData(xsevent.customConfig.getInt("xsevent.events." + name + ".icon.modelData"));
         this.setIconLore(new ArrayList<>(xsevent.customConfig.getStringList("xsevent.events." + name + ".icon.lore")));
         this.setEventDate(xsevent.customConfig.getString("xsevent.events." + name + ".eventRepeat"));
+
+        this.setOnClickMaterial(Material.getMaterial(
+                xsevent.customConfig.getString("xsevent.events." + name + ".onClick.material")));
+        this.setOnClickName(xsevent.customConfig.getString("xsevent.events." + name + ".onClick.name"));
+        this.setOnClickmodelData(xsevent.customConfig.getInt("xsevent.events." + name + ".onClick.modelData"));
+        this.setOnClickLore(new ArrayList<>(xsevent.customConfig.getStringList("xsevent.events." + name + ".onClick.lore")));
     }
 
 

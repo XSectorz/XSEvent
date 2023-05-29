@@ -44,7 +44,10 @@ public class XSEventUI {
             inventory.setItem(i,Utils.createDecoration("blocked"));
         }
 
-        core.XSPlayer.get(p.getUniqueId()).setEvtPage(1);
+        xsPlayer XSPlayer = core.XSPlayer.get(p.getUniqueId());
+
+        XSPlayer.getClickInfo().clear();
+        XSPlayer.setEvtPage(1);
 
         if(!core.pOpenGUI.containsKey(p.getUniqueId())) {
             core.pOpenGUI.put(p.getUniqueId(),inventory);
@@ -87,14 +90,27 @@ public class XSEventUI {
         }
         for(int i = 0 ; i < 8 ; i++) {
 
-            //Bukkit.broadcastMessage("INDEX: " + index);
-            //Bukkit.broadcastMessage("SIZE: " + XSEventHandler.getListEvent().size());
-
             if(index + i >= XSEventHandler.getListEvent().size()) {
                 break;
             }
 
             XSEventTemplate xsEvt = XSEventHandler.getListEvent().get(index+i);
+
+            if(core.XSPlayer.get(p.getUniqueId()).getClickInfo().containsKey(xsEvt.getIDKey())) {
+                if(core.XSPlayer.get(p.getUniqueId()).getClickInfo().get(xsEvt.getIDKey())) {
+
+                    ArrayList<String > lores = new ArrayList<>();
+                    for(String lore : xsEvt.getOnClickLore()) {
+                        lores.add(Utils.replaceColor(lore));
+                    }
+
+                    inv.setItem(evtSlot.get(i),Utils.createItem(xsEvt.getOnClickMaterial(),
+                            1,xsEvt.getOnClickmodelData(),xsEvt.getOnClickName(),lores
+                            ,false,new HashMap<>()));
+
+                    continue;
+                }
+            }
 
             boolean isGlow = false;
 
@@ -235,7 +251,6 @@ public class XSEventUI {
                 lores.add(lore);
             }
 
-            // lores.add(xsEvt.getEventDateData().toString());
 
             inv.setItem(evtSlot.get(i),Utils.createItem(xsEvt.getIconMaterial(),
                     1,xsEvt.getIconModelData(),xsEvt.getIconName(),lores

@@ -16,6 +16,13 @@ public class XSEventTemplate {
     public int iconmodelData;
     public String iconName;
     public ArrayList<String> iconLore = new ArrayList<>();
+
+    //onClick
+    public Material onClickMaterial;
+    public int onClickmodelData;
+    public String onClickName;
+    public ArrayList<String> onClickLore = new ArrayList<>();
+
     public boolean iconGlowActivate;
     public HashMap<String,XSTimer> timers = new HashMap<>();
 
@@ -31,6 +38,38 @@ public class XSEventTemplate {
     public String dateFormat;
     public HashMap<String,String> timerFormat = new HashMap<>();
 
+
+    public int getOnClickmodelData() {
+        return onClickmodelData;
+    }
+
+    public Material getOnClickMaterial() {
+        return onClickMaterial;
+    }
+
+    public String getOnClickName() {
+        return onClickName;
+    }
+
+    public ArrayList<String> getOnClickLore() {
+        return onClickLore;
+    }
+
+    public void setOnClickMaterial(Material onClickMaterial) {
+        this.onClickMaterial = onClickMaterial;
+    }
+
+    public void setOnClickLore(ArrayList<String> onClickLore) {
+        this.onClickLore = onClickLore;
+    }
+
+    public void setOnClickmodelData(int onClickmodelData) {
+        this.onClickmodelData = onClickmodelData;
+    }
+
+    public void setOnClickName(String onClickName) {
+        this.onClickName = onClickName;
+    }
 
     public void setRewards(XSRewards rewards) {
         this.rewards = rewards;

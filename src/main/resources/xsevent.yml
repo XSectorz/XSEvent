@@ -16,8 +16,22 @@ xsevent:
           - "&x&B&E&2&8&1&3[รอบที่ 2] : &x&D&A&7&E&8&D%count_round_2%"
           - "&x&B&E&2&8&1&3[รอบที่ 3] : &x&D&A&7&E&8&D%count_round_3%"
           - "&r"
+          - "&x&1&2&D&6&5&F[L-CLICK] &x&B&5&E&B&9&Fเพื่อดูรายละเอียดเพิ่มเติม"
+          - "&r"
           - "%xsevent_siam_fishing_event%"
         isGlowWhenActivate: true #เรืองแสงเมื่อถึงช่วงอีเวนต์
+      onClick:
+        material: FISHING_ROD
+        modelData: 0
+        name: "&x&C&5&B&0&3&3[กิจกรรม] &x&9&7&E&2&7&1แข่งขันตกปลา"
+        lore:
+          - "&r"
+          - "&x&A&9&D&B&8&Fเกณฑ์การรับคะแนน"
+          - "&r"
+          - "&x&1&2&D&6&5&F▪ &x&B&5&E&B&9&Fเมื่อตกปลาสำเร็จ &x&1&2&D&6&5&F&l+5.0 &x&B&5&E&B&9&Fคะแนน"
+          - "&x&C&9&1&A&3&0▪ &x&E&B&9&F&B&7เมื่อตกปลาล้มเหลว &x&C&9&1&A&3&0&l-3.0 &x&E&B&9&F&B&7คะแนน"
+          - "&r"
+          - "&8( &x&C&E&9&7&3&2&nหมายเหตุ&8 )&x&F&7&C&4&6&8 นับคะแนนเฉพาะการตกปลาพิเศษ"
       eventType: CUSTOM_FISHING
       eventRepeat: MONDAY,WEDNESDAY-FRIDAY,SUNDAY
       eventTimer:
