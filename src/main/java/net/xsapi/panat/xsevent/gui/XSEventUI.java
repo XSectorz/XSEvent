@@ -106,7 +106,9 @@ public class XSEventUI {
 
                     if(!xsEvt.getEventDateData().contains(XSEventHandler.dateInRealLife.get(new Date().getDay()))) {
                         placeholderReplace.put("%count_" + placeholder.getKey() + "%",Utils.replaceColor(Objects.requireNonNull(messages.customConfig.getString("placeholders.TIME_PASSED"))));
-                        continue;
+                        if(!xsEvt.getEventDateData().contains("EVERY_DAY")) {
+                            continue;
+                        }
                     }
 
                     long remainingTimeMillis = targetDate.getTime() - currentDate.getTime();

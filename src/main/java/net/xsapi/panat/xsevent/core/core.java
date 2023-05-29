@@ -87,7 +87,9 @@ public final class core extends JavaPlugin {
 
                 for(XSEventTemplate xsEvt : XSEventHandler.getListEvent()) {
                     if(!xsEvt.getEventDateData().contains(XSEventHandler.dateInRealLife.get(new Date().getDay()))) {
-                        continue;
+                        if(!xsEvt.getEventDateData().contains("EVERY_DAY")) {
+                            continue;
+                        }
                     }
                         for(Map.Entry<String, XSTimer> xsTimer : xsEvt.getTimers().entrySet()) {
 

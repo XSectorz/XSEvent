@@ -15,6 +15,7 @@ net\xsapi\panat\xsevent\gui\XSEventUI.class
 net\xsapi\panat\xsevent\events\model\utils\XSEventTemplate.class
 net\xsapi\panat\xsevent\events\model\utils\XSEventTemplate$1.class
 net\xsapi\panat\xsevent\utils\Utils.class
+net\xsapi\panat\xsevent\events\model\utils\XSRewards.class
 net\xsapi\panat\xsevent\events\model\utils\XSEventTrigger.class
 net\xsapi\panat\xsevent\events\model\utils\XSScore.class
 net\xsapi\panat\xsevent\listeners\XS_EventLoader.class
