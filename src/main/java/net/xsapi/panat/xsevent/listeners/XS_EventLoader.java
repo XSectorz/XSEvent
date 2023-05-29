@@ -14,6 +14,7 @@ public class XS_EventLoader {
         Bukkit.getPluginManager().registerEvents(new XS_PlayerJoinEvent(), core.getPlugin());
         Bukkit.getPluginManager().registerEvents(new XS_PlayerLeaveEvent(), core.getPlugin());
         Bukkit.getPluginManager().registerEvents(new XS_PlayerCloseInventoryEvent(), core.getPlugin());
+        Bukkit.getPluginManager().registerEvents(new XS_InventoryEvent(), core.getPlugin());
     }
 
 }

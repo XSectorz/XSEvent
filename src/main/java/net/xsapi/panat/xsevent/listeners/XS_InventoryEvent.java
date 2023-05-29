@@ -1,0 +1,41 @@
+package net.xsapi.panat.xsevent.listeners;
+
+import net.xsapi.panat.xsevent.configuration.config;
+import net.xsapi.panat.xsevent.core.core;
+import net.xsapi.panat.xsevent.events.handler.XSEventHandler;
+import net.xsapi.panat.xsevent.gui.XSEventUI;
+import net.xsapi.panat.xsevent.player.xsPlayer;
+import net.xsapi.panat.xsevent.utils.Utils;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+
+public class XS_InventoryEvent implements Listener {
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent e) {
+        if(e.getView().getTitle().equals(Utils.replaceColor(config.customConfig.getString("gui.title")))) {
+            Player p = (Player) e.getWhoClicked();
+            e.setCancelled(true);
+
+            xsPlayer xPlayer = core.XSPlayer.get(p.getUniqueId());
+
+            if(e.getSlot() == 48) {
+                if(xPlayer.getEvtPage() != 1) {
+                    xPlayer.removeEvtPage(1);
+                    XSEventUI.updateInventory(p);
+                }
+            } else if(e.getSlot() == 49) {
+                p.closeInventory();
+            } else if(e.getSlot() == 50) {
+                int index = (8  * (xPlayer.getEvtPage()-1));
+                if(XSEventHandler.getListEvent().size() > (index+8)) {
+                    xPlayer.addEvtPage(1);
+                    XSEventUI.updateInventory(p);
+                }
+            }
+        }
+    }
+
+}

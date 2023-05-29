@@ -10,9 +10,11 @@ import net.xsapi.panat.xsevent.configuration.config;
 import net.xsapi.panat.xsevent.core.core;
 import net.xsapi.panat.xsevent.utils.Utils;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -34,9 +36,24 @@ public class XSEventUI {
             p.playSound(p.getLocation(), Sound.valueOf(config.customConfig.getString("gui.sound.type")),1.0f,1.0f);
         }
 
-        inventory.setItem(48,Utils.createDecoration("previous"));
+        xsPlayer xPlayer = core.XSPlayer.get(p.getUniqueId());
+
+        if(xPlayer.getEvtPage() > 1) {
+            inventory.setItem(48,Utils.createDecoration("previous"));
+        } else {
+            inventory.setItem(48,Utils.createDecoration("previous-blocked"));
+        }
+
+        int index = (8  * (xPlayer.getEvtPage()-1));
+
+        if(XSEventHandler.getListEvent().size() >= (index+8)) {
+            inventory.setItem(50,Utils.createDecoration("next"));
+        } else {
+            inventory.setItem(50,Utils.createDecoration("next-blocked"));
+        }
+
         inventory.setItem(49,Utils.createDecoration("exit"));
-        inventory.setItem(50,Utils.createDecoration("next"));
+
         inventory.setItem(53,Utils.createDecoration("info"));
 
         for(int i = 0 ; i < 53 ; i++) {
@@ -52,6 +69,10 @@ public class XSEventUI {
             core.pOpenGUI.put(p.getUniqueId(),inventory);
         }
 
+        inventory.setItem(49,Utils.createDecoration("exit"));
+
+        inventory.setItem(53,Utils.createDecoration("info"));
+
         updateInventory(p);
         p.openInventory(inventory);
 
@@ -66,17 +87,34 @@ public class XSEventUI {
     public static void updateInventoryContents(Inventory inv,Player p) {
         xsPlayer xPlayer = core.XSPlayer.get(p.getUniqueId());
 
+        if(xPlayer.getEvtPage() > 1) {
+            inv.setItem(48,Utils.createDecoration("previous"));
+        } else {
+            inv.setItem(48,Utils.createDecoration("previous-blocked"));
+        }
 
         int index = (8  * (xPlayer.getEvtPage()-1));
 
+        if(XSEventHandler.getListEvent().size() > (index+8)) {
+            inv.setItem(50,Utils.createDecoration("next"));
+        } else {
+            inv.setItem(50,Utils.createDecoration("next-blocked"));
+        }
+
+        //clear slot
         for(int i = 0 ; i < 8 ; i++) {
+            inv.setItem(evtSlot.get(i),new ItemStack(Material.AIR));
+        }
+        for(int i = 0 ; i < 8 ; i++) {
+
+            //Bukkit.broadcastMessage("INDEX: " + index);
+            //Bukkit.broadcastMessage("SIZE: " + XSEventHandler.getListEvent().size());
 
             if(index + i >= XSEventHandler.getListEvent().size()) {
                 break;
             }
 
             XSEventTemplate xsEvt = XSEventHandler.getListEvent().get(index+i);
-
 
             ArrayList<String> lores = new ArrayList<>();
 
