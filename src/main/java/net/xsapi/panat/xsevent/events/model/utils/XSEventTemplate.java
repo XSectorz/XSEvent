@@ -1,6 +1,7 @@
 package net.xsapi.panat.xsevent.events.model.utils;
 
 import net.xsapi.panat.xsevent.configuration.messages;
+import net.xsapi.panat.xsevent.configuration.xsevent;
 import net.xsapi.panat.xsevent.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -195,7 +196,23 @@ public class XSEventTemplate {
         return iconGlowActivate;
     }
 
+    public XSEventTemplate(String name) {
 
+        this.setIDKey(name);
+
+        this.setIconMaterial(Material.getMaterial(
+                xsevent.customConfig.getString("xsevent.events." + name + ".icon.material")));
+        this.setIconName(xsevent.customConfig.getString("xsevent.events." + name + ".icon.name"));
+        this.setIconModelData(xsevent.customConfig.getInt("xsevent.events." + name + ".icon.modelData"));
+        this.setIconLore(new ArrayList<>(xsevent.customConfig.getStringList("xsevent.events." + name + ".icon.lore")));
+        this.setEventDate(xsevent.customConfig.getString("xsevent.events." + name + ".eventRepeat"));
+
+        this.setOnClickMaterial(Material.getMaterial(
+                xsevent.customConfig.getString("xsevent.events." + name + ".onClick.material")));
+        this.setOnClickName(xsevent.customConfig.getString("xsevent.events." + name + ".onClick.name"));
+        this.setOnClickmodelData(xsevent.customConfig.getInt("xsevent.events." + name + ".onClick.modelData"));
+        this.setOnClickLore(new ArrayList<>(xsevent.customConfig.getStringList("xsevent.events." + name + ".onClick.lore")));
+    }
     public void onEventEnd() {
 
         ArrayList<Map.Entry<UUID, XSScore>> entries = new ArrayList<>(scoreList.entrySet());

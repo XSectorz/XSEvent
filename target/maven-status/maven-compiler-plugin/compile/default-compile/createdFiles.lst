@@ -2,6 +2,7 @@ net\xsapi\panat\xsevent\core\core$1.class
 net\xsapi\panat\xsevent\listeners\XS_PlayerCloseInventoryEvent.class
 net\xsapi\panat\xsevent\events\model\utils\XSTimer.class
 net\xsapi\panat\xsevent\events\model\customfishing\XSEvent.class
+net\xsapi\panat\xsevent\events\model\mobhunting\XSMobHunting.class
 net\xsapi\panat\xsevent\listeners\XS_PlayerJoinEvent.class
 net\xsapi\panat\xsevent\configuration\config.class
 net\xsapi\panat\xsevent\command\commandsLoader.class
@@ -17,6 +18,7 @@ net\xsapi\panat\xsevent\events\model\utils\XSEventTemplate$1.class
 net\xsapi\panat\xsevent\utils\Utils.class
 net\xsapi\panat\xsevent\events\model\utils\XSRewards.class
 net\xsapi\panat\xsevent\events\model\utils\XSEventTrigger.class
+net\xsapi\panat\xsevent\events\model\mobhunting\XSEvent.class
 net\xsapi\panat\xsevent\events\model\utils\XSScore.class
 net\xsapi\panat\xsevent\listeners\XS_EventLoader.class
 net\xsapi\panat\xsevent\listeners\XS_InventoryEvent.class

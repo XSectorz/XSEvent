@@ -22,10 +22,8 @@ public class XSEvent implements Listener {
                 if(xsEventTemplate.isStart()) {
 
                     Entity entity = e.getEntity();
-
                     if(entity.getLastDamageCause() instanceof EntityDamageByEntityEvent) {
                         XSMobHunting xsMobHunting = (XSMobHunting) xsEventTemplate;
-
                         if(((EntityDamageByEntityEvent) entity.getLastDamageCause()).getDamager() instanceof Player) {
                             if(xsMobHunting.getEventRequired().contains(entity.getType().toString())
                                     || xsMobHunting.getEventRequired().contains("ALL")) {
