@@ -3,6 +3,7 @@ package net.xsapi.panat.xsevent.events.handler;
 import net.xsapi.panat.xsevent.configuration.messages;
 import net.xsapi.panat.xsevent.configuration.xsevent;
 import net.xsapi.panat.xsevent.events.model.customfishing.XSCustomFishing;
+import net.xsapi.panat.xsevent.events.model.mobhunting.XSMobHunting;
 import net.xsapi.panat.xsevent.events.model.utils.*;
 import net.xsapi.panat.xsevent.utils.Utils;
 
@@ -40,6 +41,17 @@ public class XSEventHandler {
                 setGlowActive(xsCustomFishingEvt);
                 setReward(xsCustomFishingEvt);
                 listEvent.add(xsCustomFishingEvt);
+            } else if(evtType.equals(XSEventType.MOB_HUNTING)) {
+                XSMobHunting xsMobHunting = new XSMobHunting(section);
+                xsMobHunting.setDateFormat(getDateString(xsMobHunting.getEventDate()));
+                setDateData(xsMobHunting);
+                setEventType(xsMobHunting);
+                setTimerFormat(xsMobHunting);
+                setEventTrigger(xsMobHunting);
+                setGlowActive(xsMobHunting);
+                setReward(xsMobHunting);
+
+                listEvent.add(xsMobHunting);
             }
 
         }
