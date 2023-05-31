@@ -5,11 +5,12 @@ import net.xsapi.panat.xsevent.events.model.utils.XSEventRequire;
 import net.xsapi.panat.xsevent.events.model.utils.XSEventTemplate;
 import net.xsapi.panat.xsevent.events.model.utils.XSEventType;
 import net.xsapi.panat.xsevent.events.model.utils.XSScore;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
@@ -64,33 +65,48 @@ public class XSEvent implements Listener {
         for(XSEventTemplate xsEventTemplate : XSEventHandler.getListEvent()) {
             if (xsEventTemplate.getEventType().equals(XSEventType.MOB_HUNTING)) {
                 if (xsEventTemplate.isStart()) {
+
+                    Player p = e.getEntity();
+                    XSMobHunting xsMobHunting = (XSMobHunting) xsEventTemplate;
+
+                    String key = "";
                     if (e.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
 
                         EntityDamageByEntityEvent nEvent = (EntityDamageByEntityEvent) e.getEntity().getLastDamageCause();
 
-                        Player p = e.getEntity();
-                        XSMobHunting xsMobHunting = (XSMobHunting) xsEventTemplate;
+                        key = nEvent.getDamager().getType().toString();
 
                         if(!xsMobHunting.getEventRequired().containsKey("ALL")
                         && !xsMobHunting.getEventRequired().containsKey(nEvent.getDamager().getType().toString())) {
-                            return;
+
+                            if(nEvent.getDamager() instanceof Arrow) {
+                                Arrow arrow = (Arrow) nEvent.getDamager();
+
+                                if(arrow.getShooter() instanceof Skeleton) {
+                                    if(!xsMobHunting.getEventRequired().containsKey("SKELETON")) {
+                                        return;
+                                    }
+                                    key = "SKELETON";
+                                }
+                            } else {
+                                return;
+                            }
                         }
+                    }
 
-                        XSEventRequire xsEventRequire;
+                    XSEventRequire xsEventRequire;
 
-                        if(!xsMobHunting.getEventRequired().containsKey("ALL")) {
-                            xsEventRequire = xsMobHunting.getEventRequired().get(nEvent.getDamager().getType().toString());
-                        } else {
-                            xsEventRequire = xsMobHunting.getEventRequired().get("ALL");
-                        }
+                    if(!xsMobHunting.getEventRequired().containsKey("ALL")) {
+                        xsEventRequire = xsMobHunting.getEventRequired().get(key);
+                    } else {
+                        xsEventRequire = xsMobHunting.getEventRequired().get("ALL");
+                    }
 
+                    if(xsEventTemplate.getScoreList().containsKey(p.getUniqueId())) {
+                        XSScore score = xsEventTemplate.getScoreList().get(p.getUniqueId());
 
-                        if(xsEventTemplate.getScoreList().containsKey(p.getUniqueId())) {
-                            XSScore score = xsEventTemplate.getScoreList().get(p.getUniqueId());
-
-                            score.setScore(score.getScore()-xsEventRequire.getRemoveScore());
-                            xsEventTemplate.getScoreList().replace(p.getUniqueId(),score);
-                        }
+                        score.setScore(score.getScore()-xsEventRequire.getRemoveScore());
+                        xsEventTemplate.getScoreList().replace(p.getUniqueId(),score);
                     }
 
                 }

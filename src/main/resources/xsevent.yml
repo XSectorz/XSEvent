@@ -184,7 +184,7 @@ xsevent:
           - "&r"
           - "&x&1&2&D&6&5&F▪ &x&B&5&E&B&9&Fเก็บเกี่ยวข้าว &x&1&2&D&6&5&F&l+0.5 &x&B&5&E&B&9&Fคะแนน"
       eventType: BLOCK_BREAK
-      eventRequire:
+      eventRequire: #ALL = ทุกชนิด จะเขียนอยู่ใน format <material>:<additionScore>
         - "WHEAT:0.5"
       eventRepeat: WEDNESDAY
       eventTimer:
