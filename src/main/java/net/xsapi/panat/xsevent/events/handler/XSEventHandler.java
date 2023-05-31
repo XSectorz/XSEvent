@@ -3,7 +3,7 @@ package net.xsapi.panat.xsevent.events.handler;
 import net.xsapi.panat.xsevent.configuration.messages;
 import net.xsapi.panat.xsevent.configuration.xsevent;
 import net.xsapi.panat.xsevent.events.model.customfishing.XSCustomFishing;
-import net.xsapi.panat.xsevent.events.model.farmharvest.XSFarmHarvest;
+import net.xsapi.panat.xsevent.events.model.blockbreak.XSBlockbreak;
 import net.xsapi.panat.xsevent.events.model.mobhunting.XSMobHunting;
 import net.xsapi.panat.xsevent.events.model.utils.*;
 import net.xsapi.panat.xsevent.utils.Utils;
@@ -37,8 +37,8 @@ public class XSEventHandler {
             } else if(evtType.equals(XSEventType.MOB_HUNTING)) {
                 XSMobHunting xsMobHunting = new XSMobHunting(section);
                 listEvent.add(xsMobHunting);
-            } else if(evtType.equals(XSEventType.FARM_HARVEST)) {
-                XSFarmHarvest xsFarmHarvest = new XSFarmHarvest(section);
+            } else if(evtType.equals(XSEventType.BLOCK_BREAK)) {
+                XSBlockbreak xsFarmHarvest = new XSBlockbreak(section);
                 listEvent.add(xsFarmHarvest);
             }
 

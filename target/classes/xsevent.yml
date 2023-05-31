@@ -112,7 +112,7 @@ xsevent:
           - "&x&C&9&1&A&3&0▪ &x&E&B&9&F&B&7ถูกมอนส์เตอร์สังหาร &x&C&9&1&A&3&0&l-5.0 &x&E&B&9&F&B&7คะแนน"
       eventType: MOB_HUNTING
       eventRequire:
-        - "ALL"
+        - "ALL:1:5"
       eventRepeat: TUESDAY
       eventTimer:
         round_1:
@@ -181,9 +181,9 @@ xsevent:
           - "&x&A&9&D&B&8&Fเกณฑ์การรับคะแนน"
           - "&r"
           - "&x&1&2&D&6&5&F▪ &x&B&5&E&B&9&Fเก็บเกี่ยวข้าว &x&1&2&D&6&5&F&l+0.5 &x&B&5&E&B&9&Fคะแนน"
-      eventType: FARM_HARVEST
+      eventType: BLOCK_BREAK
       eventRequire:
-        - "WHEAT"
+        - "WHEAT:0.5"
       eventRepeat: WEDNESDAY
       eventTimer:
         round_1:

@@ -1,6 +1,7 @@
-package net.xsapi.panat.xsevent.events.model.farmharvest;
+package net.xsapi.panat.xsevent.events.model.blockbreak;
 
 import net.xsapi.panat.xsevent.events.handler.XSEventHandler;
+import net.xsapi.panat.xsevent.events.model.utils.XSEventRequire;
 import net.xsapi.panat.xsevent.events.model.utils.XSEventTemplate;
 import net.xsapi.panat.xsevent.events.model.utils.XSEventType;
 import net.xsapi.panat.xsevent.events.model.utils.XSScore;
@@ -15,14 +16,19 @@ public class XSEvent implements Listener {
 
     @EventHandler
     public void onBreak(BlockBreakEvent e) {
+
+        if(e.isCancelled()) {
+            return;
+        }
+
         for(XSEventTemplate xsEventTemplate : XSEventHandler.getListEvent()) {
-            if (xsEventTemplate.getEventType().equals(XSEventType.FARM_HARVEST)) {
+            if (xsEventTemplate.getEventType().equals(XSEventType.BLOCK_BREAK)) {
                 if (xsEventTemplate.isStart()) {
-                    XSFarmHarvest xsFarmHarvest = (XSFarmHarvest) xsEventTemplate;
+                    XSBlockbreak xsBlokBreak = (XSBlockbreak) xsEventTemplate;
 
                     Block b = e.getBlock();
 
-                    if(xsFarmHarvest.getEventRequired().contains(b.getType().toString())) {
+                    if(xsBlokBreak.getEventRequired().containsKey(b.getType().toString())) {
                         Player p = e.getPlayer();
                         if(b.getBlockData() instanceof Ageable) {
                             Ageable ageable = (Ageable) b.getBlockData();
@@ -36,9 +42,18 @@ public class XSEvent implements Listener {
                             xsEventTemplate.getScoreList().put(p.getUniqueId(),xsScore);
                         }
 
+                        XSEventRequire xsEventRequire;
+
+                        if(!xsBlokBreak.getEventRequired().containsKey("ALL")) {
+                            xsEventRequire = xsBlokBreak.getEventRequired().get(b.getType().toString());
+                        } else {
+                            xsEventRequire = xsBlokBreak.getEventRequired().get("ALL");
+                        }
+
+
                         XSScore score = xsEventTemplate.getScoreList().get(p.getUniqueId());
 
-                        score.setScore(score.getScore()+0.5);
+                        score.setScore(score.getScore()+xsEventRequire.getAdditionScore());
 
                         xsEventTemplate.getScoreList().replace(p.getUniqueId(),score);
                     }
