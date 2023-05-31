@@ -4,7 +4,7 @@ public enum XSDate {
     MONDAY,
     TUESDAY,
     WEDNESDAY,
-    THURESDAY,
+    THURSDAY,
     FRIDAY,
     SATURDAY,
     SUNDAY,
