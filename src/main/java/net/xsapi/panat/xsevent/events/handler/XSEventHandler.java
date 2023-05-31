@@ -3,6 +3,7 @@ package net.xsapi.panat.xsevent.events.handler;
 import net.xsapi.panat.xsevent.configuration.messages;
 import net.xsapi.panat.xsevent.configuration.xsevent;
 import net.xsapi.panat.xsevent.events.model.customfishing.XSCustomFishing;
+import net.xsapi.panat.xsevent.events.model.farmharvest.XSFarmHarvest;
 import net.xsapi.panat.xsevent.events.model.mobhunting.XSMobHunting;
 import net.xsapi.panat.xsevent.events.model.utils.*;
 import net.xsapi.panat.xsevent.utils.Utils;
@@ -32,26 +33,13 @@ public class XSEventHandler {
 
             if(evtType.equals(XSEventType.CUSTOM_FISHING)) {
                 XSCustomFishing xsCustomFishingEvt = new XSCustomFishing(section);
-
-                xsCustomFishingEvt.setDateFormat(getDateString(xsCustomFishingEvt.getEventDate()));
-                setDateData(xsCustomFishingEvt);
-                setEventType(xsCustomFishingEvt);
-                setTimerFormat(xsCustomFishingEvt);
-                setEventTrigger(xsCustomFishingEvt);
-                setGlowActive(xsCustomFishingEvt);
-                setReward(xsCustomFishingEvt);
                 listEvent.add(xsCustomFishingEvt);
             } else if(evtType.equals(XSEventType.MOB_HUNTING)) {
                 XSMobHunting xsMobHunting = new XSMobHunting(section);
-                xsMobHunting.setDateFormat(getDateString(xsMobHunting.getEventDate()));
-                setDateData(xsMobHunting);
-                setEventType(xsMobHunting);
-                setTimerFormat(xsMobHunting);
-                setEventTrigger(xsMobHunting);
-                setGlowActive(xsMobHunting);
-                setReward(xsMobHunting);
-
                 listEvent.add(xsMobHunting);
+            } else if(evtType.equals(XSEventType.FARM_HARVEST)) {
+                XSFarmHarvest xsFarmHarvest = new XSFarmHarvest(section);
+                listEvent.add(xsFarmHarvest);
             }
 
         }

@@ -2,6 +2,7 @@ package net.xsapi.panat.xsevent.events.model.utils;
 
 import net.xsapi.panat.xsevent.configuration.messages;
 import net.xsapi.panat.xsevent.configuration.xsevent;
+import net.xsapi.panat.xsevent.events.handler.XSEventHandler;
 import net.xsapi.panat.xsevent.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -10,6 +11,8 @@ import org.bukkit.entity.Player;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static net.xsapi.panat.xsevent.events.handler.XSEventHandler.getDateString;
 
 public class XSEventTemplate {
 
@@ -212,6 +215,15 @@ public class XSEventTemplate {
         this.setOnClickName(xsevent.customConfig.getString("xsevent.events." + name + ".onClick.name"));
         this.setOnClickmodelData(xsevent.customConfig.getInt("xsevent.events." + name + ".onClick.modelData"));
         this.setOnClickLore(new ArrayList<>(xsevent.customConfig.getStringList("xsevent.events." + name + ".onClick.lore")));
+
+        setDateFormat(getDateString(this.getEventDate()));
+        XSEventHandler.setDateData(this);
+        XSEventHandler.setEventType(this);
+        XSEventHandler.setTimerFormat(this);
+        XSEventHandler.setEventTrigger(this);
+        XSEventHandler.setGlowActive(this);
+        XSEventHandler.setReward(this);
+
     }
     public void onEventEnd() {
 

@@ -11,11 +11,13 @@ net\xsapi\panat\xsevent\configuration\xsevent.class
 net\xsapi\panat\xsevent\core\core.class
 net\xsapi\panat\xsevent\listeners\XS_PlayerLeaveEvent.class
 net\xsapi\panat\xsevent\events\model\utils\XSEventType.class
+net\xsapi\panat\xsevent\events\model\farmharvest\XSFarmHarvest.class
 net\xsapi\panat\xsevent\events\model\utils\XSDate.class
 net\xsapi\panat\xsevent\gui\XSEventUI.class
 net\xsapi\panat\xsevent\events\model\utils\XSEventTemplate.class
 net\xsapi\panat\xsevent\events\model\utils\XSEventTemplate$1.class
 net\xsapi\panat\xsevent\utils\Utils.class
+net\xsapi\panat\xsevent\events\model\farmharvest\XSEvent.class
 net\xsapi\panat\xsevent\events\model\utils\XSRewards.class
 net\xsapi\panat\xsevent\events\model\utils\XSEventTrigger.class
 net\xsapi\panat\xsevent\events\model\mobhunting\XSEvent.class
