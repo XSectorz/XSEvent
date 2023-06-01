@@ -8,7 +8,6 @@ net\xsapi\panat\xsevent\listeners\XS_PlayerJoinEvent.class
 net\xsapi\panat\xsevent\configuration\config.class
 net\xsapi\panat\xsevent\command\commandsLoader.class
 net\xsapi\panat\xsevent\events\handler\XSEventHandler.class
-net\xsapi\panat\xsevent\configuration\xsevent.class
 net\xsapi\panat\xsevent\core\core.class
 net\xsapi\panat\xsevent\listeners\XS_PlayerLeaveEvent.class
 net\xsapi\panat\xsevent\events\model\utils\XSEventType.class

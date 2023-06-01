@@ -1,21 +1,20 @@
 package net.xsapi.panat.xsevent.events.model.mobhunting;
 
-import net.xsapi.panat.xsevent.configuration.xsevent;
 import net.xsapi.panat.xsevent.events.model.utils.XSEventRequire;
 import net.xsapi.panat.xsevent.events.model.utils.XSEventTemplate;
-import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.ArrayList;
+import java.io.File;
 import java.util.HashMap;
 
 public class XSMobHunting extends XSEventTemplate {
 
     public HashMap<String, XSEventRequire> eventRequired = new HashMap<>();
 
-    public XSMobHunting(String name) {
-        super(name);
+    public XSMobHunting(String name, File file, FileConfiguration fileConfiguration) {
+        super(name,file,fileConfiguration);
 
-        for(String section : xsevent.customConfig.getStringList("xsevent.events." + name + ".eventRequire")) {
+        for(String section : customConfig.getStringList("xsevent.events.eventRequire")) {
 
             String[] require = section.split(":");
 

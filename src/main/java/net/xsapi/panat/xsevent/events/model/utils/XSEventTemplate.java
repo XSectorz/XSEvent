@@ -1,13 +1,17 @@
 package net.xsapi.panat.xsevent.events.model.utils;
 
 import net.xsapi.panat.xsevent.configuration.messages;
-import net.xsapi.panat.xsevent.configuration.xsevent;
+import net.xsapi.panat.xsevent.core.core;
 import net.xsapi.panat.xsevent.events.handler.XSEventHandler;
 import net.xsapi.panat.xsevent.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,6 +41,14 @@ public class XSEventTemplate {
     public boolean onActivateGlowActivate;
     public HashMap<String,XSTimer> timers = new HashMap<>();
 
+    //File
+    public File customConfigFile;
+    public FileConfiguration customConfig;
+    public FileConfiguration getConfig() {
+        return customConfig;
+    }
+    public String fileName;
+
     public XSEventType eventType;
     public String eventDate;
     public ArrayList<String> eventDateData = new ArrayList<>();
@@ -48,6 +60,14 @@ public class XSEventTemplate {
     /* String */
     public String dateFormat;
     public HashMap<String,String> timerFormat = new HashMap<>();
+
+    public void setCustomConfig(FileConfiguration customConfig) {
+        this.customConfig = customConfig;
+    }
+
+    public void setCustomConfigFile(File customConfigFile) {
+        this.customConfigFile = customConfigFile;
+    }
 
     public void setOnActivateMaterial(Material onActivateMaterial) {
         this.onActivateMaterial = onActivateMaterial;
@@ -217,22 +237,33 @@ public class XSEventTemplate {
         return onActivateGlowActivate;
     }
 
-    public XSEventTemplate(String name) {
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
+    public String getFileName() {
+        return fileName;
+    }
+
+    public XSEventTemplate(String name,File file,FileConfiguration config) {
+
+        this.setCustomConfig(config);
+        this.setCustomConfigFile(file);
         this.setIDKey(name);
 
         this.setIconMaterial(Material.getMaterial(
-                xsevent.customConfig.getString("xsevent.events." + name + ".icon.material")));
-        this.setIconName(xsevent.customConfig.getString("xsevent.events." + name + ".icon.name"));
-        this.setIconModelData(xsevent.customConfig.getInt("xsevent.events." + name + ".icon.modelData"));
-        this.setIconLore(new ArrayList<>(xsevent.customConfig.getStringList("xsevent.events." + name + ".icon.lore")));
-        this.setEventDate(xsevent.customConfig.getString("xsevent.events." + name + ".eventRepeat"));
+                customConfig.getString("xsevent.events.icon.material")));
+        this.setIconName(customConfig.getString("xsevent.events.icon.name"));
+        this.setIconModelData(customConfig.getInt("xsevent.events.icon.modelData"));
+        this.setIconLore(new ArrayList<>(customConfig.getStringList("xsevent.events.icon.lore")));
+        this.setEventDate(customConfig.getString("xsevent.events.eventRepeat"));
 
         this.setOnClickMaterial(Material.getMaterial(
-                xsevent.customConfig.getString("xsevent.events." + name + ".onClick.material")));
-        this.setOnClickName(xsevent.customConfig.getString("xsevent.events." + name + ".onClick.name"));
-        this.setOnClickmodelData(xsevent.customConfig.getInt("xsevent.events." + name + ".onClick.modelData"));
-        this.setOnClickLore(new ArrayList<>(xsevent.customConfig.getStringList("xsevent.events." + name + ".onClick.lore")));
+                customConfig.getString("xsevent.events.onClick.material")));
+        this.setOnClickName(customConfig.getString("xsevent.events.onClick.name"));
+        this.setOnClickmodelData(customConfig.getInt("xsevent.events.onClick.modelData"));
+        this.setOnClickLore(new ArrayList<>(customConfig.getStringList("xsevent.events.onClick.lore")));
+
 
         setDateFormat(getDateString(this.getEventDate()));
         XSEventHandler.setDateData(this);
@@ -243,6 +274,9 @@ public class XSEventTemplate {
         XSEventHandler.setReward(this);
         XSEventHandler.setModelDataActivate(this);
         XSEventHandler.setMaterialActivate(this);
+
+
+
 
     }
     public void onEventEnd() {

@@ -2,7 +2,6 @@ package net.xsapi.panat.xsevent.command;
 
 import net.xsapi.panat.xsevent.configuration.config;
 import net.xsapi.panat.xsevent.configuration.messages;
-import net.xsapi.panat.xsevent.configuration.xsevent;
 import net.xsapi.panat.xsevent.events.handler.XSEventHandler;
 import net.xsapi.panat.xsevent.gui.XSEventUI;
 import net.xsapi.panat.xsevent.utils.Utils;
@@ -35,7 +34,9 @@ public class commands  implements CommandExecutor {
                 } else if(args.length == 1) {
                     if(args[0].equals("reload")) {
                         if(sender.hasPermission("xsevent.reload")) {
-                            xsevent.reload();
+
+                            XSEventHandler.loadEvent();
+
                             config.reload();
                             messages.reload();
                             sender.sendMessage(

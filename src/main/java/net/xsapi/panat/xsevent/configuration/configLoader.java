@@ -4,7 +4,6 @@ public class configLoader {
 
     public configLoader() {
         new config().loadConfigu();
-        new xsevent().loadConfigu();
         new messages().loadConfigu();
     }
 

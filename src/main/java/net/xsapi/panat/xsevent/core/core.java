@@ -44,7 +44,7 @@ public final class core extends JavaPlugin {
         Bukkit.getLogger().info("§x§f§f§a§c§2§f******************************");
         Bukkit.getLogger().info("§x§f§f§a§c§2§f   XSAPI Event v1.0     ");
         Bukkit.getLogger().info("§r");
-        Bukkit.getLogger().info("§x§f§f§a§c§2§f  Make the task!");
+        Bukkit.getLogger().info("§x§f§f§a§c§2§f  Make the better task!");
         Bukkit.getLogger().info("§r");
         Bukkit.getLogger().info("§x§f§f§a§c§2§f******************************");
         APILoader();

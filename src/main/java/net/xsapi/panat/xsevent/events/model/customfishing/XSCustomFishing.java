@@ -1,15 +1,14 @@
 package net.xsapi.panat.xsevent.events.model.customfishing;
 
-import net.xsapi.panat.xsevent.configuration.xsevent;
 import net.xsapi.panat.xsevent.events.model.utils.XSEventTemplate;
-import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.ArrayList;
+import java.io.File;
 
 public class XSCustomFishing extends XSEventTemplate {
 
 
-    public XSCustomFishing(String name) {
-        super(name);
+    public XSCustomFishing(String name, File file, FileConfiguration fileConfiguration) {
+        super(name,file,fileConfiguration);
     }
 }

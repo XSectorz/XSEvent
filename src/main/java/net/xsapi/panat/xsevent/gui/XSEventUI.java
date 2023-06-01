@@ -1,7 +1,6 @@
 package net.xsapi.panat.xsevent.gui;
 
 import net.xsapi.panat.xsevent.configuration.messages;
-import net.xsapi.panat.xsevent.configuration.xsevent;
 import net.xsapi.panat.xsevent.events.handler.XSEventHandler;
 import net.xsapi.panat.xsevent.events.model.utils.XSEventTemplate;
 import net.xsapi.panat.xsevent.player.xsPlayer;
@@ -140,7 +139,7 @@ public class XSEventUI {
             HashMap<String,String> placeholderReplace = new HashMap<>();
 
             for(Map.Entry<String, String> placeholder : xsEvt.getTimerFormat().entrySet()) {
-                String timeStart = xsevent.customConfig.getString("xsevent.events." + xsEvt.getIDKey() + ".eventTimer." + placeholder.getKey() +".time_to_start");
+                String timeStart = xsEvt.getConfig().getString("xsevent.events.eventTimer." + placeholder.getKey() +".time_to_start");
 
                 try {
                     Date targetDate = format.parse(timeStart);
@@ -245,7 +244,7 @@ public class XSEventUI {
                             score += df.format(xsEvt.getScoreList().get(p.getUniqueId()).getScore());
                         }
 
-                        lore = lore.replace("%xsevent_" + xsEvt.getIDKey() + "%",
+                        lore = lore.replace("%" + xsEvt.getIDKey() + "%",
                                 Utils.replaceColor(messages.customConfig.getString("placeholders.score_replace")
                                         .replace("%xs_point%",score)));
                     }
