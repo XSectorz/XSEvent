@@ -4,6 +4,7 @@ D:\Xsectorz\githubDevelop\XSEvent\src\main\java\net\xsapi\panat\xsevent\configur
 D:\Xsectorz\githubDevelop\XSEvent\src\main\java\net\xsapi\panat\xsevent\events\model\utils\XSEventType.java
 D:\Xsectorz\githubDevelop\XSEvent\src\main\java\net\xsapi\panat\xsevent\configuration\config.java
 D:\Xsectorz\githubDevelop\XSEvent\src\main\java\net\xsapi\panat\xsevent\events\model\utils\XSEventTrigger.java
+D:\Xsectorz\githubDevelop\XSEvent\src\main\java\net\xsapi\panat\xsevent\events\model\utils\XSEventRequire.java
 D:\Xsectorz\githubDevelop\XSEvent\src\main\java\net\xsapi\panat\xsevent\events\model\customfishing\XSEvent.java
 D:\Xsectorz\githubDevelop\XSEvent\src\main\java\net\xsapi\panat\xsevent\events\model\mobhunting\XSEvent.java
 D:\Xsectorz\githubDevelop\XSEvent\src\main\java\net\xsapi\panat\xsevent\command\commands.java
@@ -17,11 +18,13 @@ D:\Xsectorz\githubDevelop\XSEvent\src\main\java\net\xsapi\panat\xsevent\events\m
 D:\Xsectorz\githubDevelop\XSEvent\src\main\java\net\xsapi\panat\xsevent\gui\XSEventUI.java
 D:\Xsectorz\githubDevelop\XSEvent\src\main\java\net\xsapi\panat\xsevent\player\xsPlayer.java
 D:\Xsectorz\githubDevelop\XSEvent\src\main\java\net\xsapi\panat\xsevent\configuration\messages.java
+D:\Xsectorz\githubDevelop\XSEvent\src\main\java\net\xsapi\panat\xsevent\events\model\blockbreak\XSBlockbreak.java
 D:\Xsectorz\githubDevelop\XSEvent\src\main\java\net\xsapi\panat\xsevent\listeners\XS_PlayerJoinEvent.java
 D:\Xsectorz\githubDevelop\XSEvent\src\main\java\net\xsapi\panat\xsevent\core\core.java
 D:\Xsectorz\githubDevelop\XSEvent\src\main\java\net\xsapi\panat\xsevent\configuration\configLoader.java
 D:\Xsectorz\githubDevelop\XSEvent\src\main\java\net\xsapi\panat\xsevent\events\handler\XSEventHandler.java
 D:\Xsectorz\githubDevelop\XSEvent\src\main\java\net\xsapi\panat\xsevent\listeners\XS_EventLoader.java
+D:\Xsectorz\githubDevelop\XSEvent\src\main\java\net\xsapi\panat\xsevent\events\model\blockbreak\XSEvent.java
 D:\Xsectorz\githubDevelop\XSEvent\src\main\java\net\xsapi\panat\xsevent\utils\Utils.java
 D:\Xsectorz\githubDevelop\XSEvent\src\main\java\net\xsapi\panat\xsevent\listeners\XS_PlayerCloseInventoryEvent.java
 D:\Xsectorz\githubDevelop\XSEvent\src\main\java\net\xsapi\panat\xsevent\events\model\utils\XSScore.java

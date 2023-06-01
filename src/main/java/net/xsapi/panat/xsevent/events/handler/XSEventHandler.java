@@ -7,6 +7,7 @@ import net.xsapi.panat.xsevent.events.model.blockbreak.XSBlockbreak;
 import net.xsapi.panat.xsevent.events.model.mobhunting.XSMobHunting;
 import net.xsapi.panat.xsevent.events.model.utils.*;
 import net.xsapi.panat.xsevent.utils.Utils;
+import org.bukkit.Material;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -51,8 +52,18 @@ public class XSEventHandler {
     }
 
     public static void setGlowActive(XSEventTemplate XSETemplate) {
-        XSETemplate.setIconGlowActivate(xsevent.customConfig.getBoolean("xsevent.events."
-        +XSETemplate.getIDKey()+".icon.isGlowWhenActivate"));
+        XSETemplate.setOnActivateGlowActivate(xsevent.customConfig.getBoolean("xsevent.events."
+        +XSETemplate.getIDKey()+".activateOption.isGlowWhenActivate"));
+    }
+
+    public static void setMaterialActivate(XSEventTemplate XSETemplate) {
+        XSETemplate.setOnActivateMaterial(Material.getMaterial(xsevent.customConfig.getString("xsevent.events."
+                +XSETemplate.getIDKey()+".activateOption.material")));
+    }
+
+    public static void setModelDataActivate(XSEventTemplate XSETemplate) {
+        XSETemplate.setOnActivateModelData(xsevent.customConfig.getInt("xsevent.events."
+                +XSETemplate.getIDKey()+".activateOption.modelData"));
     }
 
     public static void setReward(XSEventTemplate XSETemplate) {

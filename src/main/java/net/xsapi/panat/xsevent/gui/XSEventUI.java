@@ -4,7 +4,6 @@ import net.xsapi.panat.xsevent.configuration.messages;
 import net.xsapi.panat.xsevent.configuration.xsevent;
 import net.xsapi.panat.xsevent.events.handler.XSEventHandler;
 import net.xsapi.panat.xsevent.events.model.utils.XSEventTemplate;
-import net.xsapi.panat.xsevent.events.model.utils.XSScore;
 import net.xsapi.panat.xsevent.player.xsPlayer;
 import net.xsapi.panat.xsevent.configuration.config;
 import net.xsapi.panat.xsevent.core.core;
@@ -113,9 +112,13 @@ public class XSEventUI {
             }
 
             boolean isGlow = false;
+            Material mat = xsEvt.getIconMaterial();
+            int modelData = xsEvt.getIconModelData();
 
             if(xsEvt.isStart()) {
-                isGlow = xsEvt.getIsIconGlowActivate();
+                isGlow = xsEvt.getIsOnActivateGlowActivate();
+                mat = xsEvt.getOnActivateMaterial();
+                modelData = xsEvt.getOnActivateModelData();
             }
 
             ArrayList<String> lores = new ArrayList<>();
@@ -252,8 +255,8 @@ public class XSEventUI {
             }
 
 
-            inv.setItem(evtSlot.get(i),Utils.createItem(xsEvt.getIconMaterial(),
-                    1,xsEvt.getIconModelData(),xsEvt.getIconName(),lores
+            inv.setItem(evtSlot.get(i),Utils.createItem(mat,
+                    1,modelData,xsEvt.getIconName(),lores
                     ,isGlow,new HashMap<>()));
 
         }

@@ -19,7 +19,10 @@ xsevent:
           - "&x&1&2&D&6&5&F[L-CLICK] &x&B&5&E&B&9&Fเพื่อดูรายละเอียดเพิ่มเติม"
           - "&r"
           - "%xsevent_siam_fishing_event%"
+      activateOption:
         isGlowWhenActivate: true #เรืองแสงเมื่อถึงช่วงอีเวนต์
+        material: FISHING_ROD
+        modelData: 0
       onClick:
         material: FISHING_ROD
         modelData: 0
@@ -99,7 +102,10 @@ xsevent:
           - "&x&1&2&D&6&5&F[L-CLICK] &x&B&5&E&B&9&Fเพื่อดูรายละเอียดเพิ่มเติม"
           - "&r"
           - "%xsevent_siam_mob_killing%"
+      activateOption:
         isGlowWhenActivate: true #เรืองแสงเมื่อถึงช่วงอีเวนต์
+        material: BOW
+        modelData: 0
       onClick:
         material: BOW
         modelData: 0
@@ -173,7 +179,10 @@ xsevent:
           - "&x&1&2&D&6&5&F[L-CLICK] &x&B&5&E&B&9&Fเพื่อดูรายละเอียดเพิ่มเติม"
           - "&r"
           - "%xsevent_siam_farming%"
+      activateOption:
         isGlowWhenActivate: true #เรืองแสงเมื่อถึงช่วงอีเวนต์
+        material: WHEAT
+        modelData: 0
       onClick:
         material: WHEAT
         modelData: 0

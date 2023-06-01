@@ -31,7 +31,10 @@ public class XSEventTemplate {
     public String onClickName;
     public ArrayList<String> onClickLore = new ArrayList<>();
 
-    public boolean iconGlowActivate;
+    //OnActivate
+    public Material onActivateMaterial;
+    public int onActivateModelData;
+    public boolean onActivateGlowActivate;
     public HashMap<String,XSTimer> timers = new HashMap<>();
 
     public XSEventType eventType;
@@ -46,6 +49,21 @@ public class XSEventTemplate {
     public String dateFormat;
     public HashMap<String,String> timerFormat = new HashMap<>();
 
+    public void setOnActivateMaterial(Material onActivateMaterial) {
+        this.onActivateMaterial = onActivateMaterial;
+    }
+
+    public Material getOnActivateMaterial() {
+        return onActivateMaterial;
+    }
+
+    public void setOnActivateModelData(int onActivateModelData) {
+        this.onActivateModelData = onActivateModelData;
+    }
+
+    public int getOnActivateModelData() {
+        return onActivateModelData;
+    }
 
     public int getOnClickmodelData() {
         return onClickmodelData;
@@ -144,8 +162,8 @@ public class XSEventTemplate {
         return eventType;
     }
 
-    public void setIconGlowActivate(boolean iconGlowActivate) {
-        this.iconGlowActivate = iconGlowActivate;
+    public void setOnActivateGlowActivate(boolean onActivateGlowActivate) {
+        this.onActivateGlowActivate = onActivateGlowActivate;
     }
 
     public void setIconLore(ArrayList<String> iconLore) {
@@ -195,8 +213,8 @@ public class XSEventTemplate {
         return iconLore;
     }
 
-    public boolean getIsIconGlowActivate() {
-        return iconGlowActivate;
+    public boolean getIsOnActivateGlowActivate() {
+        return onActivateGlowActivate;
     }
 
     public XSEventTemplate(String name) {
@@ -223,6 +241,8 @@ public class XSEventTemplate {
         XSEventHandler.setEventTrigger(this);
         XSEventHandler.setGlowActive(this);
         XSEventHandler.setReward(this);
+        XSEventHandler.setModelDataActivate(this);
+        XSEventHandler.setMaterialActivate(this);
 
     }
     public void onEventEnd() {

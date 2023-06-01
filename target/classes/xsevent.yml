@@ -19,7 +19,10 @@ xsevent:
           - "&x&1&2&D&6&5&F[L-CLICK] &x&B&5&E&B&9&Fเพื่อดูรายละเอียดเพิ่มเติม"
           - "&r"
           - "%xsevent_siam_fishing_event%"
+      activateOption:
         isGlowWhenActivate: true #เรืองแสงเมื่อถึงช่วงอีเวนต์
+        material: FISHING_ROD
+        modelData: 0
       onClick:
         material: FISHING_ROD
         modelData: 0
@@ -99,7 +102,10 @@ xsevent:
           - "&x&1&2&D&6&5&F[L-CLICK] &x&B&5&E&B&9&Fเพื่อดูรายละเอียดเพิ่มเติม"
           - "&r"
           - "%xsevent_siam_mob_killing%"
+      activateOption:
         isGlowWhenActivate: true #เรืองแสงเมื่อถึงช่วงอีเวนต์
+        material: BOW
+        modelData: 0
       onClick:
         material: BOW
         modelData: 0
@@ -111,8 +117,10 @@ xsevent:
           - "&x&1&2&D&6&5&F▪ &x&B&5&E&B&9&Fสังหารมอนส์เตอร์ &x&1&2&D&6&5&F&l+1.0 &x&B&5&E&B&9&Fคะแนน"
           - "&x&C&9&1&A&3&0▪ &x&E&B&9&F&B&7ถูกมอนส์เตอร์สังหาร &x&C&9&1&A&3&0&l-5.0 &x&E&B&9&F&B&7คะแนน"
       eventType: MOB_HUNTING
-      eventRequire:
-        - "ALL:1:5"
+      eventRequire: #ALL = ทุกชนิด จะเขียนอยู่ใน format <entity>:<additionScore>:<removeScore>
+        #- "ALL:1:5"
+        - "ZOMBIE:1:5"
+        - "SPIDER:1:5"
       eventRepeat: TUESDAY
       eventTimer:
         round_1:
@@ -171,7 +179,10 @@ xsevent:
           - "&x&1&2&D&6&5&F[L-CLICK] &x&B&5&E&B&9&Fเพื่อดูรายละเอียดเพิ่มเติม"
           - "&r"
           - "%xsevent_siam_farming%"
+      activateOption:
         isGlowWhenActivate: true #เรืองแสงเมื่อถึงช่วงอีเวนต์
+        material: WHEAT
+        modelData: 0
       onClick:
         material: WHEAT
         modelData: 0
@@ -182,7 +193,7 @@ xsevent:
           - "&r"
           - "&x&1&2&D&6&5&F▪ &x&B&5&E&B&9&Fเก็บเกี่ยวข้าว &x&1&2&D&6&5&F&l+0.5 &x&B&5&E&B&9&Fคะแนน"
       eventType: BLOCK_BREAK
-      eventRequire:
+      eventRequire: #ALL = ทุกชนิด จะเขียนอยู่ใน format <material>:<additionScore>
         - "WHEAT:0.5"
       eventRepeat: WEDNESDAY
       eventTimer:
