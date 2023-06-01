@@ -49,6 +49,7 @@ public class XSEventTemplate {
     }
     public String fileName;
 
+    public int eventPriority;
     public XSEventType eventType;
     public String eventDate;
     public ArrayList<String> eventDateData = new ArrayList<>();
@@ -60,6 +61,14 @@ public class XSEventTemplate {
     /* String */
     public String dateFormat;
     public HashMap<String,String> timerFormat = new HashMap<>();
+
+    public int getEventPriority() {
+        return eventPriority;
+    }
+
+    public void setEventPriority(int eventPriority) {
+        this.eventPriority = eventPriority;
+    }
 
     public void setCustomConfig(FileConfiguration customConfig) {
         this.customConfig = customConfig;
@@ -263,7 +272,7 @@ public class XSEventTemplate {
         this.setOnClickName(customConfig.getString("xsevent.events.onClick.name"));
         this.setOnClickmodelData(customConfig.getInt("xsevent.events.onClick.modelData"));
         this.setOnClickLore(new ArrayList<>(customConfig.getStringList("xsevent.events.onClick.lore")));
-
+        this.setEventPriority(customConfig.getInt("xsevent.events.priority"));
 
         setDateFormat(getDateString(this.getEventDate()));
         XSEventHandler.setDateData(this);

@@ -1,5 +1,6 @@
 xsevent:
   events:
+    priority: 2
     icon:
       material: BOW
       modelData: 0

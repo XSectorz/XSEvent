@@ -1,5 +1,6 @@
 xsevent:
   events:
+    priority: 1
     icon:
       material: FISHING_ROD
       modelData: 0

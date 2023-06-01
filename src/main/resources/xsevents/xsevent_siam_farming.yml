@@ -1,5 +1,6 @@
 xsevent:
   events:
+    priority: 3
     icon:
       material: WHEAT
       modelData: 0

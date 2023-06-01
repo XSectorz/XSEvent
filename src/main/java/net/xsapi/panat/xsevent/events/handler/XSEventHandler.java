@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class XSEventHandler {
 
@@ -34,6 +36,20 @@ public class XSEventHandler {
 
         checkDirectoryAndCreateFile();
         getAllEvents();
+
+        ArrayList<XSEventTemplate> temp = (ArrayList<XSEventTemplate>) listEvent.clone();
+
+        Collections.sort(temp, new Comparator<XSEventTemplate>() {
+
+            public int compare(XSEventTemplate entry1, XSEventTemplate entry2) {
+                int priority1 = entry1.getEventPriority();
+                int priority2 = entry2.getEventPriority();
+
+                return Integer.compare(priority1, priority2);
+            }
+        });
+
+        listEvent = temp;
 
         //Bukkit.broadcastMessage("Load Quest: " + listEvent.size());
         Bukkit.getLogger().info("§x§f§f§c§e§2§2[XSEVENT] Quests Loaded : §x§4§D§D§5§5§1" + listEvent.size() + " §x§f§f§c§e§2§2!");

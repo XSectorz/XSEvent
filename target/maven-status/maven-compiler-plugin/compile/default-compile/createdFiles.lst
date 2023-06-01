@@ -24,6 +24,7 @@ net\xsapi\panat\xsevent\events\model\utils\XSScore.class
 net\xsapi\panat\xsevent\listeners\XS_EventLoader.class
 net\xsapi\panat\xsevent\events\model\utils\XSEventRequire.class
 net\xsapi\panat\xsevent\listeners\XS_InventoryEvent.class
+net\xsapi\panat\xsevent\events\handler\XSEventHandler$1.class
 net\xsapi\panat\xsevent\configuration\configLoader.class
 net\xsapi\panat\xsevent\command\commands.class
 net\xsapi\panat\xsevent\configuration\messages.class
