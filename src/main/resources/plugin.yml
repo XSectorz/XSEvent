@@ -8,3 +8,5 @@ description: Make your player have a task event!
 commands:
   xsevent:
     description: command for xsevent plugin
+    aliases:
+      - event

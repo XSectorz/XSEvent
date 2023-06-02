@@ -95,7 +95,7 @@ public final class core extends JavaPlugin {
                         current.getSecond() == targetStartTime.getSecond()) {
                             xsEvt.setStart(true);
                             xsEvt.setEventNotifyCurrentTimer(0);
-
+                            xsEvt.setRoundKey(xsTimer.getKey());
                             for (String text : xsEvt.getEvtTrigger().getStartBoardcast()) {
                                 Bukkit.broadcastMessage(Utils.replaceColor(text));
                             }
@@ -117,8 +117,9 @@ public final class core extends JavaPlugin {
 
                         if(current.isAfter(targetStartTime) && current.isBefore(targetEndTime)) {
                             if(!xsEvt.isStart()) {
+                                xsEvt.setStart(true);
                                 xsEvt.setEventNotifyCurrentTimer(0);
-
+                                xsEvt.setRoundKey(xsTimer.getKey());
                                 for (String text : xsEvt.getEvtTrigger().getStartBoardcast()) {
                                     Bukkit.broadcastMessage(Utils.replaceColor(text));
                                 }
@@ -129,11 +130,23 @@ public final class core extends JavaPlugin {
                             }
                         }
 
+                        if(current.isAfter(targetEndTime)) {
+                            if(xsEvt.getRoundKey().equalsIgnoreCase(xsTimer.getKey()) && xsEvt.isStart()) {
+                                xsEvt.setStart(false);
+                                xsEvt.setEventNotifyCurrentTimer(0);
+                                xsEvt.onEventEnd();
+                                for(String cmd : xsEvt.getEvtTrigger().getEndTrigger()) {
+                                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(),cmd);
+                                }
+                            }
+                        }
                     }
 
+
                     if(xsEvt.isStart()) {
+
                         xsEvt.setEventNotifyCurrentTimer(xsEvt.getEventNotifyCurrentTimer()+1);
-                        if(xsEvt.getEventNotifyCurrentTimer() == xsEvt.getEventNotifyTimer()) {
+                        if(xsEvt.getEventNotifyCurrentTimer() >= xsEvt.getEventNotifyTimer()) {
                             xsEvt.sendNotify();
                         }
                     }

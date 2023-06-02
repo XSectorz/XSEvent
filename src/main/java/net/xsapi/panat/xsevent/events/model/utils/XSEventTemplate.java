@@ -61,6 +61,16 @@ public class XSEventTemplate {
     public String dateFormat;
     public HashMap<String,String> timerFormat = new HashMap<>();
 
+    public String roundKey = "";
+
+    public void setRoundKey(String roundKey) {
+        this.roundKey = roundKey;
+    }
+
+    public String getRoundKey() {
+        return roundKey;
+    }
+
     public void setEventNotifyCurrentTimer(int eventNotifyCurrentTimer) {
         this.eventNotifyCurrentTimer = eventNotifyCurrentTimer;
     }
