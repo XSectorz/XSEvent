@@ -30,4 +30,5 @@ net\xsapi\panat\xsevent\command\commands.class
 net\xsapi\panat\xsevent\configuration\messages.class
 net\xsapi\panat\xsevent\core\core$2.class
 net\xsapi\panat\xsevent\events\model\customfishing\XSCustomFishing.class
+net\xsapi\panat\xsevent\events\model\utils\XSEventTemplate$2.class
 net\xsapi\panat\xsevent\player\xsPlayer.class

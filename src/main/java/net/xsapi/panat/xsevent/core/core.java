@@ -114,6 +114,21 @@ public final class core extends JavaPlugin {
                                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(),cmd);
                             }
                         }
+
+                        if(current.isAfter(targetStartTime) && current.isBefore(targetEndTime)) {
+                            if(!xsEvt.isStart()) {
+                                xsEvt.setEventNotifyCurrentTimer(0);
+
+                                for (String text : xsEvt.getEvtTrigger().getStartBoardcast()) {
+                                    Bukkit.broadcastMessage(Utils.replaceColor(text));
+                                }
+
+                                for(String cmd : xsEvt.getEvtTrigger().getStartTrigger()) {
+                                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(),cmd);
+                                }
+                            }
+                        }
+
                     }
 
                     if(xsEvt.isStart()) {
