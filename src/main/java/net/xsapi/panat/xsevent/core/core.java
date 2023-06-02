@@ -84,7 +84,8 @@ public final class core extends JavaPlugin {
                             continue;
                         }
                     }
-                        for(Map.Entry<String, XSTimer> xsTimer : xsEvt.getTimers().entrySet()) {
+
+                    for(Map.Entry<String, XSTimer> xsTimer : xsEvt.getTimers().entrySet()) {
 
                         LocalTime targetStartTime = LocalTime.parse(xsTimer.getValue().getStartTimer());
                         LocalTime targetEndTime = LocalTime.parse(xsTimer.getValue().getEndTimer());
@@ -93,6 +94,7 @@ public final class core extends JavaPlugin {
                         current.getMinute() == targetStartTime.getMinute() &&
                         current.getSecond() == targetStartTime.getSecond()) {
                             xsEvt.setStart(true);
+                            xsEvt.setEventNotifyCurrentTimer(0);
 
                             for (String text : xsEvt.getEvtTrigger().getStartBoardcast()) {
                                 Bukkit.broadcastMessage(Utils.replaceColor(text));
@@ -106,11 +108,18 @@ public final class core extends JavaPlugin {
                                 current.getMinute() == targetEndTime.getMinute() &&
                                 current.getSecond() == targetEndTime.getSecond()) {
                             xsEvt.setStart(false);
-
+                            xsEvt.setEventNotifyCurrentTimer(0);
                             xsEvt.onEventEnd();
                             for(String cmd : xsEvt.getEvtTrigger().getEndTrigger()) {
                                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(),cmd);
                             }
+                        }
+                    }
+
+                    if(xsEvt.isStart()) {
+                        xsEvt.setEventNotifyCurrentTimer(xsEvt.getEventNotifyCurrentTimer()+1);
+                        if(xsEvt.getEventNotifyCurrentTimer() == xsEvt.getEventNotifyTimer()) {
+                            xsEvt.sendNotify();
                         }
                     }
                 }

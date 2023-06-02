@@ -1,17 +1,14 @@
 package net.xsapi.panat.xsevent.events.model.utils;
 
 import net.xsapi.panat.xsevent.configuration.messages;
-import net.xsapi.panat.xsevent.core.core;
 import net.xsapi.panat.xsevent.events.handler.XSEventHandler;
 import net.xsapi.panat.xsevent.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -47,8 +44,10 @@ public class XSEventTemplate {
     public FileConfiguration getConfig() {
         return customConfig;
     }
-    public String fileName;
 
+    public int eventNotifyCurrentTimer = 0;
+    public int eventNotifyTimer;
+    public ArrayList<String> eventNotifyBroadcast;
     public int eventPriority;
     public XSEventType eventType;
     public String eventDate;
@@ -61,6 +60,30 @@ public class XSEventTemplate {
     /* String */
     public String dateFormat;
     public HashMap<String,String> timerFormat = new HashMap<>();
+
+    public void setEventNotifyCurrentTimer(int eventNotifyCurrentTimer) {
+        this.eventNotifyCurrentTimer = eventNotifyCurrentTimer;
+    }
+
+    public int getEventNotifyCurrentTimer() {
+        return eventNotifyCurrentTimer;
+    }
+
+    public void setEventNotifyBroadcast(ArrayList<String> eventNotifyBroadcast) {
+        this.eventNotifyBroadcast = eventNotifyBroadcast;
+    }
+
+    public ArrayList<String> getEventNotifyBroadcast() {
+        return eventNotifyBroadcast;
+    }
+
+    public void setEventNotifyTimer(int eventNotifyTimer) {
+        this.eventNotifyTimer = eventNotifyTimer;
+    }
+
+    public int getEventNotifyTimer() {
+        return eventNotifyTimer;
+    }
 
     public int getEventPriority() {
         return eventPriority;
@@ -163,10 +186,6 @@ public class XSEventTemplate {
         return eventDateData;
     }
 
-    public void setEventDateData(ArrayList<String> eventDateData) {
-        this.eventDateData = eventDateData;
-    }
-
     public String getEventDate() {
         return eventDate;
     }
@@ -246,14 +265,6 @@ public class XSEventTemplate {
         return onActivateGlowActivate;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
     public XSEventTemplate(String name,File file,FileConfiguration config) {
 
         this.setCustomConfig(config);
@@ -261,18 +272,20 @@ public class XSEventTemplate {
         this.setIDKey(name);
 
         this.setIconMaterial(Material.getMaterial(
-                customConfig.getString("xsevent.events.icon.material")));
+                Objects.requireNonNull(customConfig.getString("xsevent.events.icon.material"))));
         this.setIconName(customConfig.getString("xsevent.events.icon.name"));
         this.setIconModelData(customConfig.getInt("xsevent.events.icon.modelData"));
         this.setIconLore(new ArrayList<>(customConfig.getStringList("xsevent.events.icon.lore")));
         this.setEventDate(customConfig.getString("xsevent.events.eventRepeat"));
 
         this.setOnClickMaterial(Material.getMaterial(
-                customConfig.getString("xsevent.events.onClick.material")));
+                Objects.requireNonNull(customConfig.getString("xsevent.events.onClick.material"))));
         this.setOnClickName(customConfig.getString("xsevent.events.onClick.name"));
         this.setOnClickmodelData(customConfig.getInt("xsevent.events.onClick.modelData"));
         this.setOnClickLore(new ArrayList<>(customConfig.getStringList("xsevent.events.onClick.lore")));
         this.setEventPriority(customConfig.getInt("xsevent.events.priority"));
+        this.setEventNotifyTimer(customConfig.getInt("xsevent.events.eventNotify.repeat"));
+        this.setEventNotifyBroadcast(new ArrayList<>(customConfig.getStringList("xsevent.events.eventNotify.broadcast")));
 
         setDateFormat(getDateString(this.getEventDate()));
         XSEventHandler.setDateData(this);
@@ -292,7 +305,7 @@ public class XSEventTemplate {
 
         ArrayList<Map.Entry<UUID, XSScore>> entries = new ArrayList<>(scoreList.entrySet());
 
-        Collections.sort(entries, new Comparator<Map.Entry<UUID, XSScore>>() {
+        entries.sort(new Comparator<Map.Entry<UUID, XSScore>>() {
             @Override
             public int compare(Map.Entry<UUID, XSScore> entry1, Map.Entry<UUID, XSScore> entry2) {
                 double score1 = entry1.getValue().score;
@@ -321,7 +334,7 @@ public class XSEventTemplate {
 
                     if(ranking.size() < rank) {
                         text = text.replace("%xsevent_top_" + match + "%",
-                                messages.customConfig.getString("placeholders.no_players"));
+                                Objects.requireNonNull(messages.customConfig.getString("placeholders.no_players")));
                     } else {
                         text = text.replace("%xsevent_top_" + match + "%",
                                 ranking.get(rank-1).getValue().getPlayer().getName());
@@ -339,16 +352,101 @@ public class XSEventTemplate {
 
                     if(ranking.size() < rank) {
                         text = text.replace("%xsevent_top_score_" + match + "%",
-                                messages.customConfig.getString("placeholders.no_score"));
+                                Objects.requireNonNull(messages.customConfig.getString("placeholders.no_score")));
                     } else {
                         text = text.replace("%xsevent_top_score_" + match + "%",
-                                ranking.get(rank-1).getValue().getScore()+"");
+                                String.valueOf(ranking.get(rank - 1).getValue().getScore()));
                     }
                 }
             }
 
             Bukkit.broadcastMessage(Utils.replaceColor(text));
         }
+    }
+
+    public void sendNotify() {
+
+        ArrayList<Map.Entry<UUID, XSScore>> ranking = new ArrayList<>(scoreList.entrySet());
+
+        ranking.sort(new Comparator<Map.Entry<UUID, XSScore>>() {
+            @Override
+            public int compare(Map.Entry<UUID, XSScore> entry1, Map.Entry<UUID, XSScore> entry2) {
+                double score1 = entry1.getValue().score;
+                double score2 = entry2.getValue().score;
+
+                return Double.compare(score2, score1);
+            }
+        });
+
+        int rankNum = 1;
+        HashMap<Player,Integer> pRank = new HashMap<>();
+
+        for(Map.Entry<UUID,XSScore> entry : ranking) {
+            Player p = entry.getValue().getPlayer();
+
+            pRank.put(p,rankNum);
+
+            rankNum += 1;
+
+        }
+
+        for(Player p : Bukkit.getOnlinePlayers()) {
+            for(String text : this.getEventNotifyBroadcast()) {
+                if(text.contains("%xsevent_top")) {
+                    String regex = "%xsevent_top_(\\d+)%";
+                    Pattern pattern = Pattern.compile(regex);
+                    Matcher matcher = pattern.matcher(text);
+
+                    if(matcher.find()) {
+                        String match = matcher.group(1);
+                        int rank = Integer.parseInt(match);
+
+                        if(ranking.size() < rank) {
+                            text = text.replace("%xsevent_top_" + match + "%",
+                                    Objects.requireNonNull(messages.customConfig.getString("placeholders.no_players")));
+                        } else {
+                            text = text.replace("%xsevent_top_" + match + "%",
+                                    ranking.get(rank-1).getValue().getPlayer().getName());
+                        }
+                    }
+                }
+                if(text.contains("%xsevent_top_score_")) {
+                    String regex = "%xsevent_top_score_(\\d+)%";
+                    Pattern pattern = Pattern.compile(regex);
+                    Matcher matcher = pattern.matcher(text);
+
+                    if(matcher.find()) {
+                        String match = matcher.group(1);
+                        int rank = Integer.parseInt(match);
+
+                        if(ranking.size() < rank) {
+                            text = text.replace("%xsevent_top_score_" + match + "%",
+                                    Objects.requireNonNull(messages.customConfig.getString("placeholders.no_score")));
+                        } else {
+                            text = text.replace("%xsevent_top_score_" + match + "%",
+                                    String.valueOf(ranking.get(rank - 1).getValue().getScore()));
+                        }
+                    }
+                }
+
+                text = text.replace("%xsevent_player%",p.getName().toString());
+
+                if(!scoreList.containsKey(p.getUniqueId())) {
+                    text = text.replace("%xsevent_score%",Objects.requireNonNull(messages.customConfig.getString("placeholders.no_score")));
+                } else {
+                    text = text.replace("%xsevent_score%",scoreList.get(p.getUniqueId()).getScore()+"");
+                }
+
+                if(!pRank.containsKey(p)) {
+                    text = text.replace("%xsevent_myrank%",Objects.requireNonNull(messages.customConfig.getString("placeholders.no_players")));
+                } else {
+                    text = text.replace("%xsevent_myrank%",pRank.get(p).toString());
+                }
+
+                p.sendMessage(Utils.replaceColor(text));
+            }
+        }
+        this.setEventNotifyCurrentTimer(0);
     }
 
     public void sendRewards(ArrayList<Map.Entry<UUID,XSScore>> ranking) {

@@ -66,6 +66,23 @@ xsevent:
           - "             &x&D&5&7&8&2&D&l3. &x&E&B&9&5&5&0%xsevent_top_3% &8- &x&E&B&9&5&5&0%xsevent_top_score_3% คะแนน"
           - ""
           - "&8◣────────────────────────────◢"
+    eventNotify:
+      repeat: 10 #seconds
+      broadcast:
+        - ""
+        - "&8◤────────────────────────────◥"
+        - ""
+        - "                    &x&F&0&9&4&1&C&lH&x&F&1&9&C&1&E&lU&x&F&2&A&3&2&0&lN&x&F&4&A&B&2&2&lT&x&F&5&B&2&2&4&lI&x&F&5&B&8&2&7&lN&x&F&6&B&D&2&B&lG &x&F&6&C&2&2&E&lC&x&F&7&C&7&3&2&lO&x&F&7&C&7&3&2&lM&x&F&6&C&2&2&E&lP&x&F&6&B&D&2&B&lE&x&F&5&B&8&2&7&lT&x&F&5&B&2&2&4&lI&x&F&4&A&B&2&2&lT&x&F&2&A&3&2&0&lI&x&F&1&9&C&1&E&lO&x&F&0&9&4&1&C&lN"
+        - "             "
+        - "             &x&E&E&F&0&5&3กิจกรรมยังดำเนินการอยู่ &x&A&0&A&2&5&1/xsevent &x&E&E&F&0&5&3สำหรับข้อมูลเพิ่มเติม"
+        - "             "
+        - "             &x&F&8&B&6&2&5&l1. &x&F&7&C&8&6&2%xsevent_top_1% &8- &x&F&7&C&8&6&2%xsevent_top_score_1% คะแนน"
+        - "             &x&5&A&5&A&5&A&l2. &x&9&C&9&9&9&3%xsevent_top_2% &8- &x&9&C&9&9&9&3%xsevent_top_score_2% คะแนน"
+        - "             &x&D&5&7&8&2&D&l3. &x&E&B&9&5&5&0%xsevent_top_3% &8- &x&E&B&9&5&5&0%xsevent_top_score_3% คะแนน"
+        - "             "
+        - "             &x&E&E&F&0&5&3อันดับของคุณ &7&o(#%xsevent_myrank%&7&o) &x&E&E&F&0&5&3%xsevent_player% &8- &x&E&E&F&0&5&3%xsevent_score% คะแนน"
+        - "             "
+        - "&8◣────────────────────────────◢"
     event_rewards:
       prize:
         1_prize:
