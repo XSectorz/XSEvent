@@ -36,6 +36,8 @@ xsevent:
       #- "ALL:1:5"
       - "ZOMBIE:1:5"
       - "SPIDER:1:5"
+    eventExcept:
+      - "GUARDIAN"
     eventRepeat: TUESDAY
     eventTimer:
       round_1:

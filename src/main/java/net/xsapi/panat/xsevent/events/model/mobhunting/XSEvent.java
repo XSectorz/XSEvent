@@ -46,6 +46,12 @@ public class XSEvent implements Listener {
                                     xsEventRequire = xsMobHunting.getEventRequired().get("ALL");
                                 }
 
+                                if(!xsMobHunting.getListExcept().isEmpty()) {
+                                    if(xsMobHunting.getListExcept().contains(entity.getType().toString())) {
+                                        return;
+                                    }
+                                }
+
                                 score.setScore(score.getScore()+xsEventRequire.getAdditionScore()
                                 );
 
@@ -99,7 +105,14 @@ public class XSEvent implements Listener {
                     if(!xsMobHunting.getEventRequired().containsKey("ALL")) {
                         xsEventRequire = xsMobHunting.getEventRequired().get(key);
                     } else {
+                        key = "ALL";
                         xsEventRequire = xsMobHunting.getEventRequired().get("ALL");
+                    }
+
+                    if(!xsMobHunting.getListExcept().isEmpty()) {
+                        if(xsMobHunting.getListExcept().contains(key)) {
+                            return;
+                        }
                     }
 
                     if(xsEventTemplate.getScoreList().containsKey(p.getUniqueId())) {

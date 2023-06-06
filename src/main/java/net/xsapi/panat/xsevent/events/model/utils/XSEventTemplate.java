@@ -61,7 +61,17 @@ public class XSEventTemplate {
     public String dateFormat;
     public HashMap<String,String> timerFormat = new HashMap<>();
 
+    public ArrayList<String> listExcept = new ArrayList<>();
+
     public String roundKey = "";
+
+    public void setListExcept(ArrayList<String> listExcept) {
+        this.listExcept = listExcept;
+    }
+
+    public ArrayList<String> getListExcept() {
+        return listExcept;
+    }
 
     public void setRoundKey(String roundKey) {
         this.roundKey = roundKey;
@@ -296,6 +306,10 @@ public class XSEventTemplate {
         this.setEventPriority(customConfig.getInt("xsevent.events.priority"));
         this.setEventNotifyTimer(customConfig.getInt("xsevent.events.eventNotify.repeat"));
         this.setEventNotifyBroadcast(new ArrayList<>(customConfig.getStringList("xsevent.events.eventNotify.broadcast")));
+
+        if(customConfig.get("xsevent.events.eventExcept") != null) {
+            this.setListExcept(new ArrayList<>(customConfig.getStringList("xsevent.events.eventExcept")));
+        }
 
         setDateFormat(getDateString(this.getEventDate()));
         XSEventHandler.setDateData(this);

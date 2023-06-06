@@ -50,6 +50,12 @@ public class XSEvent implements Listener {
                             xsEventRequire = xsBlokBreak.getEventRequired().get("ALL");
                         }
 
+                        if(!xsBlokBreak.getListExcept().isEmpty()) {
+                            if(xsBlokBreak.getListExcept().contains(b.getType().toString())) {
+                                return;
+                            }
+                        }
+
 
                         XSScore score = xsEventTemplate.getScoreList().get(p.getUniqueId());
 
