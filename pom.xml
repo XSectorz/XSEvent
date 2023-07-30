@@ -40,7 +40,7 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <outputFile>D:\Xsectorz\Server\Sur1_19_3\plugins\[XSAPI]_Event.jar</outputFile>
+                            <outputFile>D:\Xsectorz\Server\Sur1_20_1\plugins\[XSAPI]_Event.jar</outputFile>
                         </configuration>
                     </execution>
                 </executions>
@@ -63,6 +63,11 @@
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
+        <repository>
+            <id>oracle-maven-repo</id>
+            <name>Oracle Maven Repository</name>
+            <url>https://www.oracle.com/content/secure/maven/content</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -73,12 +78,17 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>3.6.0</version>
+        </dependency>
+        <dependency>
             <groupId>net.momirealms</groupId>
             <artifactId>customfishing</artifactId>
             <version>1.0</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/libs/CustomFishing-1.3.1.1-all.jar</systemPath>
         </dependency>
-
     </dependencies>
 </project>
+

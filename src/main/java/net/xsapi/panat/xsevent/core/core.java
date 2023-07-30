@@ -2,6 +2,7 @@ package net.xsapi.panat.xsevent.core;
 
 import net.momirealms.customfishing.CustomFishing;
 import net.xsapi.panat.xsevent.command.commandsLoader;
+import net.xsapi.panat.xsevent.configuration.config;
 import net.xsapi.panat.xsevent.configuration.configLoader;
 import net.xsapi.panat.xsevent.events.handler.XSEventHandler;
 import net.xsapi.panat.xsevent.events.model.utils.XSEventTemplate;
@@ -14,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import redis.clients.jedis.Jedis;
 
 import java.time.LocalTime;
 import java.util.Date;
@@ -37,22 +39,29 @@ public final class core extends JavaPlugin {
     public static CustomFishing cfAPI = null;
 
     public static HashMap<UUID, Inventory> pOpenGUI = new HashMap<>();
+    public static Jedis jedis;
+    private static boolean usingRedis = false;
 
     @Override
     public void onEnable() {
         plugin = this;
-        Bukkit.getLogger().info("§x§f§f§a§c§2§f******************************");
-        Bukkit.getLogger().info("§x§f§f§a§c§2§f   XSAPI Event v1.0     ");
-        Bukkit.getLogger().info("§r");
-        Bukkit.getLogger().info("§x§f§f§a§c§2§f  Make the better task!");
-        Bukkit.getLogger().info("§r");
-        Bukkit.getLogger().info("§x§f§f§a§c§2§f******************************");
+        Bukkit.getConsoleSender().sendMessage("§x§f§f§a§c§2§f******************************");
+        Bukkit.getConsoleSender().sendMessage("§x§f§f§a§c§2§f   XSAPI Event v1.0     ");
+        Bukkit.getConsoleSender().sendMessage("§r");
+        Bukkit.getConsoleSender().sendMessage("§x§f§f§a§c§2§f  Make the better task!");
+        Bukkit.getConsoleSender().sendMessage("§r");
+        Bukkit.getConsoleSender().sendMessage("§x§f§f§a§c§2§f******************************");
+
         APILoader();
 
         new commandsLoader();
         new configLoader();
-
         new XS_EventLoader();
+
+        SetupDefault();
+        if(usingRedis) {
+            redisConnection();
+        }
 
         XSEventHandler.loadEvent();
         loadPlayerData();
@@ -167,7 +176,7 @@ public final class core extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        Bukkit.getLogger().info("§c[XSEVENT] Plugin Disabled 1.19.3!");
+        Bukkit.getConsoleSender().sendMessage("§c[XSEVENT] Plugin Disabled " + Bukkit.getServer().getBukkitVersion());
     }
 
 
@@ -184,11 +193,33 @@ public final class core extends JavaPlugin {
     }
     public void APILoader() {
         if(!setUPCustomFishing()) {
-            Bukkit.getLogger().info("§x§f§f§c§e§2§2[XSEVENT] CustomFishing: §x§f§f§5§8§5§8Not Hook");
+            Bukkit.getConsoleSender().sendMessage("§x§f§f§c§e§2§2[XSEVENT] CustomFishing: §x§f§f§5§8§5§8Not Hook");
         } else {
-            Bukkit.getLogger().info("§x§f§f§c§e§2§2[XSEVENT] CustomFishing: §x§5§d§f§f§6§3Hook");
+            Bukkit.getConsoleSender().sendMessage("§x§f§f§c§e§2§2[XSEVENT] CustomFishing: §x§5§d§f§f§6§3Hook");
         }
-
     }
+
+    private void SetupDefault() {
+        usingRedis = config.customConfig.getBoolean("redis.enable");
+    }
+
+    private void redisConnection() {
+        String redisHost = config.customConfig.getString("redis.host");
+        int redisPort = config.customConfig.getInt("redis.port");
+        String password = config.customConfig.getString("redis.password");
+
+        try {
+            jedis = new Jedis(redisHost, redisPort);
+            if(!password.isEmpty()) {
+                jedis.auth(password);
+            }
+            jedis.close();
+            Bukkit.getConsoleSender().sendMessage("§x§E§7§F§F§0§0[XSEVENT] Redis Server : §x§6§0§F§F§0§0Connected");
+        } catch (Exception e) {
+            Bukkit.getConsoleSender().sendMessage("§x§E§7§F§F§0§0[XSEVENT] Redis Server : §x§C§3§0§C§2§ANot Connected");
+            e.printStackTrace();
+        }
+    }
+
 
 }

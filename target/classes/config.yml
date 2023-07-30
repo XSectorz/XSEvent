@@ -1,4 +1,9 @@
 
+redis:
+  enable: false
+  host: localhost
+  port: 6379
+  password: ''
 gui:
   title: "&8Events"
   sound:

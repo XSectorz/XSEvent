@@ -52,7 +52,7 @@ public class XSEventHandler {
         listEvent = temp;
 
         //Bukkit.broadcastMessage("Load Quest: " + listEvent.size());
-        Bukkit.getLogger().info("§x§f§f§c§e§2§2[XSEVENT] Quests Loaded : §x§4§D§D§5§5§1" + listEvent.size() + " §x§f§f§c§e§2§2!");
+        Bukkit.getConsoleSender().sendMessage("§x§f§f§c§e§2§2[XSEVENT] Quests Loaded : §x§4§D§D§5§5§1" + listEvent.size() + " §x§f§f§c§e§2§2!");
 
     }
 
