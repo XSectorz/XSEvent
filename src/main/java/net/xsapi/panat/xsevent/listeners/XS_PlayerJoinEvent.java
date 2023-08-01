@@ -15,6 +15,10 @@ public class XS_PlayerJoinEvent implements Listener {
 
         xsPlayer xPlayer = new xsPlayer(p);
 
+        if(core.getUsingRedis()) {
+            core.getPlugin().sendMessageToRedisAsync("XSEventLogin/Channel/"
+                    +core.getRedisHost(),core.getLocalRedis()+":" + p.getUniqueId());
+        }
         core.XSPlayer.put(p.getUniqueId(),xPlayer);
     }
 

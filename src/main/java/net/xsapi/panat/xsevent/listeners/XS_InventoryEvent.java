@@ -3,6 +3,7 @@ package net.xsapi.panat.xsevent.listeners;
 import net.xsapi.panat.xsevent.configuration.config;
 import net.xsapi.panat.xsevent.core.core;
 import net.xsapi.panat.xsevent.events.handler.XSEventHandler;
+import net.xsapi.panat.xsevent.events.model.utils.XSEventTemplate;
 import net.xsapi.panat.xsevent.gui.XSEventUI;
 import net.xsapi.panat.xsevent.player.xsPlayer;
 import net.xsapi.panat.xsevent.utils.Utils;
@@ -10,6 +11,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class XS_InventoryEvent implements Listener {
 
@@ -20,6 +25,7 @@ public class XS_InventoryEvent implements Listener {
             e.setCancelled(true);
 
             xsPlayer xPlayer = core.XSPlayer.get(p.getUniqueId());
+            List<Map.Entry<String, XSEventTemplate>> Event = new ArrayList<>(XSEventHandler.getListEvent().entrySet());
 
             if(XSEventUI.evtSlot.contains(e.getSlot())) {
 
@@ -28,7 +34,8 @@ public class XS_InventoryEvent implements Listener {
                 int realIndex = (xPlayer.getEvtPage()-1)*8 + index;
 
                 if (realIndex < XSEventHandler.getListEvent().size()) {
-                    String key = XSEventHandler.getListEvent().get(realIndex).getIDKey();
+
+                    String key = Event.get(realIndex).getValue().getIDKey();
 
                     if(!xPlayer.getClickInfo().containsKey(key)) {
                         xPlayer.getClickInfo().put(key,true);

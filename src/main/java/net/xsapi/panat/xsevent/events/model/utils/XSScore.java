@@ -3,12 +3,15 @@ package net.xsapi.panat.xsevent.events.model.utils;
 import org.bukkit.entity.Player;
 
 public class XSScore {
-
-    public Player p;
     public double score = 0;
+    public String player;
 
-    public XSScore(Player p) {
-        this.p = p;
+    public XSScore(String player) {
+        this.player = player;
+    }
+
+    public String getPlayerName() {
+        return this.player;
     }
 
     public void setScore(double score) {
@@ -17,9 +20,5 @@ public class XSScore {
 
     public double getScore() {
         return score;
-    }
-
-    public Player getPlayer() {
-        return p;
     }
 }

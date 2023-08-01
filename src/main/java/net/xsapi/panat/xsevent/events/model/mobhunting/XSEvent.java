@@ -5,20 +5,21 @@ import net.xsapi.panat.xsevent.events.model.utils.XSEventRequire;
 import net.xsapi.panat.xsevent.events.model.utils.XSEventTemplate;
 import net.xsapi.panat.xsevent.events.model.utils.XSEventType;
 import net.xsapi.panat.xsevent.events.model.utils.XSScore;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+
+import java.util.Map;
 
 public class XSEvent implements Listener {
 
     @EventHandler
     public void onKill(EntityDeathEvent e) {
-        for(XSEventTemplate xsEventTemplate : XSEventHandler.getListEvent()) {
+        for(Map.Entry<String,XSEventTemplate> eventList : XSEventHandler.getListEvent().entrySet()) {
+            XSEventTemplate xsEventTemplate = eventList.getValue();
             if (xsEventTemplate.getEventType().equals(XSEventType.MOB_HUNTING)) {
                 if(xsEventTemplate.isStart()) {
 
@@ -31,12 +32,12 @@ public class XSEvent implements Listener {
 
                                 Player p = (Player) ((EntityDamageByEntityEvent) entity.getLastDamageCause()).getDamager();
 
-                                if(!xsEventTemplate.getScoreList().containsKey(p.getUniqueId())) {
-                                    XSScore xsScore = new XSScore(p);
-                                    xsEventTemplate.getScoreList().put(p.getUniqueId(),xsScore);
+                                if(!xsEventTemplate.getScoreList().containsKey(p.getUniqueId().toString())) {
+                                    XSScore xsScore = new XSScore(p.getName().toString());
+                                    xsEventTemplate.getScoreList().put(p.getUniqueId().toString(),xsScore);
                                 }
 
-                                XSScore score = xsEventTemplate.getScoreList().get(p.getUniqueId());
+                                XSScore score = xsEventTemplate.getScoreList().get(p.getUniqueId().toString());
 
                                 XSEventRequire xsEventRequire;
 
@@ -55,7 +56,7 @@ public class XSEvent implements Listener {
                                 score.setScore(score.getScore()+xsEventRequire.getAdditionScore()
                                 );
 
-                                xsEventTemplate.getScoreList().replace(p.getUniqueId(),score);
+                                xsEventTemplate.getScoreList().replace(p.getUniqueId().toString(),score);
 
                             }
                         }
@@ -68,7 +69,8 @@ public class XSEvent implements Listener {
 
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
-        for(XSEventTemplate xsEventTemplate : XSEventHandler.getListEvent()) {
+        for(Map.Entry<String,XSEventTemplate> eventList : XSEventHandler.getListEvent().entrySet()) {
+            XSEventTemplate xsEventTemplate = eventList.getValue();
             if (xsEventTemplate.getEventType().equals(XSEventType.MOB_HUNTING)) {
                 if (xsEventTemplate.isStart()) {
 
@@ -115,11 +117,11 @@ public class XSEvent implements Listener {
                         }
                     }
 
-                    if(xsEventTemplate.getScoreList().containsKey(p.getUniqueId())) {
-                        XSScore score = xsEventTemplate.getScoreList().get(p.getUniqueId());
+                    if(xsEventTemplate.getScoreList().containsKey(p.getUniqueId().toString())) {
+                        XSScore score = xsEventTemplate.getScoreList().get(p.getUniqueId().toString());
 
                         score.setScore(score.getScore()-xsEventRequire.getRemoveScore());
-                        xsEventTemplate.getScoreList().replace(p.getUniqueId(),score);
+                        xsEventTemplate.getScoreList().replace(p.getUniqueId().toString(),score);
                     }
 
                 }

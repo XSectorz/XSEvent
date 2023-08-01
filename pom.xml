@@ -68,6 +68,11 @@
             <name>Oracle Maven Repository</name>
             <url>https://www.oracle.com/content/secure/maven/content</url>
         </repository>
+        <repository>
+            <id>central</id>
+            <name>Maven Central Repository</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -81,6 +86,11 @@
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
             <version>3.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.8</version>
         </dependency>
         <dependency>
             <groupId>net.momirealms</groupId>

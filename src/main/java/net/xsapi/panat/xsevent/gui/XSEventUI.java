@@ -86,13 +86,14 @@ public class XSEventUI {
         for(int i = 0 ; i < 8 ; i++) {
             inv.setItem(evtSlot.get(i),new ItemStack(Material.AIR));
         }
+        List<Map.Entry<String, XSEventTemplate>> Event = new ArrayList<>(XSEventHandler.getListEvent().entrySet());
         for(int i = 0 ; i < 8 ; i++) {
 
             if(index + i >= XSEventHandler.getListEvent().size()) {
                 break;
             }
 
-            XSEventTemplate xsEvt = XSEventHandler.getListEvent().get(index+i);
+            XSEventTemplate xsEvt = Event.get(index+i).getValue();
 
             if(core.XSPlayer.get(p.getUniqueId()).getClickInfo().containsKey(xsEvt.getIDKey())) {
                 if(core.XSPlayer.get(p.getUniqueId()).getClickInfo().get(xsEvt.getIDKey())) {
@@ -238,10 +239,10 @@ public class XSEventUI {
 
                         String score = "";
 
-                        if(!xsEvt.getScoreList().containsKey(p.getUniqueId())) {
+                        if(!xsEvt.getScoreList().containsKey(p.getUniqueId().toString())) {
                             score = "-";
                         } else {
-                            score += df.format(xsEvt.getScoreList().get(p.getUniqueId()).getScore());
+                            score += df.format(xsEvt.getScoreList().get(p.getUniqueId().toString()).getScore());
                         }
 
                         lore = lore.replace("%" + xsEvt.getIDKey() + "%",

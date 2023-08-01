@@ -10,30 +10,33 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import java.util.Map;
+
 public class XSEvent implements Listener {
     @EventHandler
     public void onFish(FishResultEvent e) {
 
-        for(XSEventTemplate xsEventTemplate : XSEventHandler.getListEvent()) {
+        for(Map.Entry<String,XSEventTemplate> eventList : XSEventHandler.getListEvent().entrySet()) {
+            XSEventTemplate xsEventTemplate = eventList.getValue();
             if(xsEventTemplate.getEventType().equals(XSEventType.CUSTOM_FISHING)) {
                 if(xsEventTemplate.isStart()) {
                     FishResult result = e.getResult();
 
                     if(result.equals(FishResult.FAILURE) || result.equals(FishResult.CATCH_SPECIAL_ITEM)) {
                         Player p = e.getPlayer();
-                        if(!xsEventTemplate.getScoreList().containsKey(p.getUniqueId())) {
-                            XSScore xsScore = new XSScore(p);
-                            xsEventTemplate.getScoreList().put(p.getUniqueId(),xsScore);
+                        if(!xsEventTemplate.getScoreList().containsKey(p.getUniqueId().toString())) {
+                            XSScore xsScore = new XSScore(p.getName().toString());
+                            xsEventTemplate.getScoreList().put(p.getUniqueId().toString(),xsScore);
                         }
 
-                        XSScore score = xsEventTemplate.getScoreList().get(p.getUniqueId());
+                        XSScore score = xsEventTemplate.getScoreList().get(p.getUniqueId().toString());
 
                         if(result.equals(FishResult.FAILURE)) {
                             score.setScore(score.getScore()-3);
                         } else if(result.equals(FishResult.CATCH_SPECIAL_ITEM)) {
                             score.setScore(score.getScore()+5);
                         }
-                        xsEventTemplate.getScoreList().replace(p.getUniqueId(),score);
+                        xsEventTemplate.getScoreList().replace(p.getUniqueId().toString(),score);
                     }
                 }
             }

@@ -15,46 +15,43 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.*;
 
 public class XSEventHandler {
 
-    public static ArrayList<XSEventTemplate> listEvent = new ArrayList<>();
+    public static HashMap<String, XSEventTemplate> listEvent = new HashMap<String,XSEventTemplate>();
 
     public static ArrayList<String> dateData = new ArrayList<>(Arrays.asList("MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY","SUNDAY","EVERY_DAY"));
 
     public static ArrayList<String> dateInRealLife = new ArrayList<>(Arrays.asList("SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY"));
 
     public static void loadEvent() {
-
         //Bukkit.broadcastMessage("START LOAD");
-
         listEvent.clear();
 
         checkDirectoryAndCreateFile();
         getAllEvents();
 
-        ArrayList<XSEventTemplate> temp = (ArrayList<XSEventTemplate>) listEvent.clone();
+        List<Map.Entry<String, XSEventTemplate>> tempList = new ArrayList<>(listEvent.entrySet());
 
-        Collections.sort(temp, new Comparator<XSEventTemplate>() {
-
-            public int compare(XSEventTemplate entry1, XSEventTemplate entry2) {
-                int priority1 = entry1.getEventPriority();
-                int priority2 = entry2.getEventPriority();
+        Collections.sort(tempList, new Comparator<Map.Entry<String, XSEventTemplate>>() {
+            public int compare(Map.Entry<String, XSEventTemplate> entry1, Map.Entry<String, XSEventTemplate> entry2) {
+                int priority1 = entry1.getValue().getEventPriority();
+                int priority2 = entry2.getValue().getEventPriority();
 
                 return Integer.compare(priority1, priority2);
             }
         });
 
-        listEvent = temp;
+        listEvent.clear();
+        for (Map.Entry<String, XSEventTemplate> entry : tempList) {
+            listEvent.put(entry.getKey(), entry.getValue());
+        }
 
         //Bukkit.broadcastMessage("Load Quest: " + listEvent.size());
         Bukkit.getConsoleSender().sendMessage("§x§f§f§c§e§2§2[XSEVENT] Quests Loaded : §x§4§D§D§5§5§1" + listEvent.size() + " §x§f§f§c§e§2§2!");
-
     }
+
 
     public static void checkDirectoryAndCreateFile() {
         String directoryName = "xsevents";
@@ -112,15 +109,15 @@ public class XSEventHandler {
                             if(evtType.equals(XSEventType.CUSTOM_FISHING)) {
                                 XSCustomFishing xsCustomFishingEvt = new XSCustomFishing(fileName.replace(".yml","")
                                         ,customConfigFile,customConfig);
-                                listEvent.add(xsCustomFishingEvt);
+                                listEvent.put(xsCustomFishingEvt.getIDKey(),xsCustomFishingEvt);
                             } else if(evtType.equals(XSEventType.MOB_HUNTING)) {
                                 XSMobHunting xsMobHunting = new XSMobHunting(fileName.replace(".yml","")
                                         ,customConfigFile,customConfig);
-                                listEvent.add(xsMobHunting);
+                                listEvent.put(xsMobHunting.getIDKey(),xsMobHunting);
                             } else if(evtType.equals(XSEventType.BLOCK_BREAK)) {
                                 XSBlockbreak xsFarmHarvest = new XSBlockbreak(fileName.replace(".yml","")
                                         ,customConfigFile,customConfig);
-                                listEvent.add(xsFarmHarvest);
+                                listEvent.put(xsFarmHarvest.getIDKey(),xsFarmHarvest);
                             }
                         }
                     }
@@ -129,7 +126,7 @@ public class XSEventHandler {
         }
     }
 
-    public static ArrayList<XSEventTemplate> getListEvent() {
+    public static HashMap<String, XSEventTemplate> getListEvent() {
         return listEvent;
     }
 
