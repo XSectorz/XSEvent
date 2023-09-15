@@ -3,6 +3,7 @@ net\xsapi\panat\xsevent\listeners\XS_PlayerCloseInventoryEvent.class
 net\xsapi\panat\xsevent\events\model\utils\XSTimer.class
 net\xsapi\panat\xsevent\events\model\customfishing\XSEvent.class
 net\xsapi\panat\xsevent\utils\RedisDataObject.class
+net\xsapi\panat\xsevent\events\model\utils\XSEventTemplate$1$1.class
 net\xsapi\panat\xsevent\core\core$3.class
 net\xsapi\panat\xsevent\events\model\blockbreak\XSEvent.class
 net\xsapi\panat\xsevent\events\model\mobhunting\XSMobHunting.class

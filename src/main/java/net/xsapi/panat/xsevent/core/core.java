@@ -71,11 +71,11 @@ public final class core extends JavaPlugin {
                 localRedis = config.customConfig.getString("cross-server.server-name");
                 hostRedis = config.customConfig.getString("cross-server.parent-name");
 
-                Bukkit.getConsoleSender().sendMessage("CH Name: " + localRedis);
-                Bukkit.getConsoleSender().sendMessage("Parent CH Name: " + hostRedis);
-                subscribeToChannelAsync(localRedis);
-                subscribeToChannelAsync("LoginEvent/"+localRedis);
-                subscribeToChannelAsync("XSEventRedisData");
+                //Bukkit.getConsoleSender().sendMessage("CH Name: " + core.getLocalRedis());
+                //Bukkit.getConsoleSender().sendMessage("Parent CH Name: " + core.getRedisHost());
+                //subscribeToChannelAsync(core.getLocalRedis());
+                subscribeToChannelAsync("LoginEvent/"+core.getLocalRedis());
+                subscribeToChannelAsync("XSEventRedisData/"+core.getRedisHost());
             }
         }
 
@@ -109,7 +109,7 @@ public final class core extends JavaPlugin {
                 JedisPubSub jedisPubSub = new JedisPubSub() {
                     @Override
                     public void onMessage(String channel, String message) {
-                        if(channel.equalsIgnoreCase("LoginEvent/"+localRedis)) {
+                        if(channel.equalsIgnoreCase("LoginEvent/"+core.getLocalRedis())) {
                          //   Bukkit.getConsoleSender().sendMessage("Received Data Login " + message);
                             Gson gson = new Gson();
                             RedisPlayerData playerData = gson.fromJson(message, RedisPlayerData.class);
@@ -128,7 +128,7 @@ public final class core extends JavaPlugin {
 
                             //Bukkit.getConsoleSender().sendMessage("--------------------------------");
                         } else if(channel.equalsIgnoreCase("XSEventRedisData/" + core.getRedisHost())) {
-                        //    Bukkit.getConsoleSender().sendMessage("Recieved Event Data From XSEventRedis");
+                            //Bukkit.getConsoleSender().sendMessage("Recieved Event Data From " + "XSEventRedisData/" + core.getRedisHost());
                             Gson gson = new Gson();
                             Type scoreMapType = new TypeToken<HashMap<String, HashMap<String, XSScore>>>() {}.getType();
                             HashMap<String, HashMap<String, XSScore>> scoreRedis = gson.fromJson(message, scoreMapType);
@@ -159,13 +159,13 @@ public final class core extends JavaPlugin {
                                 }
                             }
 
-                            //for(Map.Entry<String, XSEventTemplate> event : XSEventHandler.getListEvent().entrySet()) {
-                              //  if(event.getValue().isStart()) {
-                                  //  Bukkit.getConsoleSender().sendMessage("Event: " + event.getValue().getIDKey());
-                                  //  Bukkit.getConsoleSender().sendMessage("Score: ");
-                                   // for(Map.Entry<String,XSScore> eventScore : event.getValue().getScoreList().entrySet()) {
-                                   //     Bukkit.broadcastMessage("P: " + eventScore.getValue().getPlayerName() + " Score: " + eventScore.getValue().getScore());
-                                   // }
+                           // for(Map.Entry<String, XSEventTemplate> event : XSEventHandler.getListEvent().entrySet()) {
+                            //    if(event.getValue().isStart()) {
+                                   // Bukkit.getConsoleSender().sendMessage("Event: " + event.getValue().getIDKey());
+                                   // Bukkit.getConsoleSender().sendMessage("Score: ");
+                              //      for(Map.Entry<String,XSScore> eventScore : event.getValue().getScoreList().entrySet()) {
+                                 //       Bukkit.broadcastMessage("P: " + eventScore.getValue().getPlayerName() + " Score: " + eventScore.getValue().getScore());
+                                //   }
                                 //}
                             //}
 

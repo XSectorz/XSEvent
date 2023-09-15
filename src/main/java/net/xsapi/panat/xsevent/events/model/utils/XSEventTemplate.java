@@ -331,24 +331,32 @@ public class XSEventTemplate {
 
     }
     public void onEventEnd() {
+       // Bukkit.broadcastMessage("Event end waiting for last data from redis server...");
+        Bukkit.getScheduler().scheduleSyncDelayedTask(core.getPlugin(), new Runnable() {
 
-        ArrayList<Map.Entry<String, XSScore>> entries = new ArrayList<>(scoreList.entrySet());
-
-        entries.sort(new Comparator<Map.Entry<String, XSScore>>() {
             @Override
-            public int compare(Map.Entry<String, XSScore> entry1, Map.Entry<String, XSScore> entry2) {
-                double score1 = entry1.getValue().score;
-                double score2 = entry2.getValue().score;
+            public void run() {
+                ArrayList<Map.Entry<String, XSScore>> entries = new ArrayList<>(scoreList.entrySet());
 
-                return Double.compare(score2, score1);
+                entries.sort(new Comparator<Map.Entry<String, XSScore>>() {
+                    @Override
+                    public int compare(Map.Entry<String, XSScore> entry1, Map.Entry<String, XSScore> entry2) {
+                        double score1 = entry1.getValue().score;
+                        double score2 = entry2.getValue().score;
+
+                        return Double.compare(score2, score1);
+                    }
+                });
+
+                endBoardcast(entries);
+                sendRewards(entries);
+                if(core.getUsingRedis()) {
+                    sendRedisEndSignal();
+                }
+                scoreList.clear();
             }
-        });
+        }, 200L);
 
-        endBoardcast(entries);
-        sendRewards(entries);
-        if(core.getUsingRedis()) {
-            sendRedisEndSignal();
-        }
     }
 
     public void sendRedisEndSignal() {
