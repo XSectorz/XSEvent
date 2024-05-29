@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.util.*;
@@ -336,22 +337,23 @@ public class XSEventTemplate {
 
             @Override
             public void run() {
-                ArrayList<Map.Entry<String, XSScore>> entries = new ArrayList<>(scoreList.entrySet());
-
-                entries.sort(new Comparator<Map.Entry<String, XSScore>>() {
-                    @Override
-                    public int compare(Map.Entry<String, XSScore> entry1, Map.Entry<String, XSScore> entry2) {
-                        double score1 = entry1.getValue().score;
-                        double score2 = entry2.getValue().score;
-
-                        return Double.compare(score2, score1);
-                    }
-                });
-
-                endBoardcast(entries);
-                sendRewards(entries);
+                //sendRewards(entries);
                 if(core.getUsingRedis()) {
                     sendRedisEndSignal();
+                } else {
+                    ArrayList<Map.Entry<String, XSScore>> entries = new ArrayList<>(scoreList.entrySet());
+
+                    entries.sort(new Comparator<Map.Entry<String, XSScore>>() {
+                        @Override
+                        public int compare(Map.Entry<String, XSScore> entry1, Map.Entry<String, XSScore> entry2) {
+                            double score1 = entry1.getValue().score;
+                            double score2 = entry2.getValue().score;
+
+                            return Double.compare(score2, score1);
+                        }
+                    });
+
+                    endBoardcast(entries);
                 }
                 scoreList.clear();
             }
@@ -360,10 +362,45 @@ public class XSEventTemplate {
     }
 
     public void sendRedisEndSignal() {
-        core.getPlugin().sendMessageToRedisAsync("XSEventReset/" + core.getRedisHost(), this.getIDKey());
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(XSScore.class, new XSScoreTypeAdapter());
+        Gson gson = gsonBuilder.create();
+
+        RedisDataObject redisDataObject = new RedisDataObject(getIDKey(), scoreList);
+
+        String json = gson.toJson(redisDataObject);
+        Bukkit.getLogger().info("Send Data to Redis Server... End Signal");
+        core.getPlugin().sendMessageToRedisAsync("XSEventReset/" + core.getRedisHost(), json+"<SPLIT>"+this.getIDKey());
+    }
+
+    public void sendRewards(ArrayList<Map.Entry<String, XSScore>> ranking) {
+
+        int rank = 1;
+
+        for(Map.Entry<String,XSScore> entry : ranking) {
+            String p = entry.getValue().getPlayerName();
+            //Bukkit.broadcastMessage("Player: " + p.getName() + ", Score: " + entry.getValue().getScore());
+
+            if(rank > this.getRewards().getRewardsList().size()) {
+                for (String rewardList : this.getRewards().getParticipantsRewards()) {
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(),rewardList.replace("%player%", p
+                    ));
+                }
+            } else {
+                for(String rewardList : this.getRewards().getRewardsList().get(rank)) {
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(),rewardList.replace("%player%", p
+                    ));
+                }
+            }
+            rank += 1;
+
+        }
+
     }
 
     public void endBoardcast(ArrayList<Map.Entry<String, XSScore>> ranking) {
+
+        ArrayList<Map.Entry<String, XSScore>> tempRanking = (ArrayList<Map.Entry<String, XSScore>>) ranking.clone();
 
         for (String text : this.getEvtTrigger().getEndBoardcast()) {
 
@@ -380,8 +417,26 @@ public class XSEventTemplate {
                         text = text.replace("%xsevent_top_" + match + "%",
                                 Objects.requireNonNull(messages.customConfig.getString("placeholders.no_players")));
                     } else {
+
+                        String playerName = ranking.get(rank-1).getValue().getPlayerName();
+
                         text = text.replace("%xsevent_top_" + match + "%",
-                                ranking.get(rank-1).getValue().getPlayerName());
+                                playerName);
+                        tempRanking.removeIf(entry -> entry.getValue().getPlayerName().equals(playerName));
+
+                        for(String rewardList : this.getRewards().getRewardsList().get(Integer.parseInt(match))) {
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(),rewardList.replace("%player%", playerName
+                                    ));
+                                }
+                            }.runTask(core.getPlugin());
+                            //Bukkit.getLogger().info("Player: " + playerName + " | Rank: " + rank + " | Reward: " + rewardList);
+                        }
+                        //Bukkit.getLogger().info("----------------------");
+
+
                     }
                 }
             }
@@ -405,6 +460,18 @@ public class XSEventTemplate {
             }
 
             Bukkit.broadcastMessage(Utils.replaceColor(text));
+        }
+
+        for(Map.Entry<String,XSScore> entry : tempRanking) {
+            for(String rewardList : this.getRewards().getParticipantsRewards()) {
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),rewardList.replace("%player%", entry.getValue().getPlayerName()
+                        ));
+                    }
+                }.runTask(core.getPlugin());
+            }
         }
     }
 
@@ -502,30 +569,5 @@ public class XSEventTemplate {
             }
         }
         this.setEventNotifyCurrentTimer(0);
-    }
-
-    public void sendRewards(ArrayList<Map.Entry<String, XSScore>> ranking) {
-
-        int rank = 1;
-
-        for(Map.Entry<String,XSScore> entry : ranking) {
-            String p = entry.getValue().getPlayerName();
-            //Bukkit.broadcastMessage("Player: " + p.getName() + ", Score: " + entry.getValue().getScore());
-
-            if(rank > this.getRewards().getRewardsList().size()) {
-                for (String rewardList : this.getRewards().getParticipantsRewards()) {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(),rewardList.replace("%player%", p
-                    ));
-                }
-            } else {
-                for(String rewardList : this.getRewards().getRewardsList().get(rank)) {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(),rewardList.replace("%player%", p
-                    ));
-                }
-            }
-            rank += 1;
-
-        }
-
     }
 }

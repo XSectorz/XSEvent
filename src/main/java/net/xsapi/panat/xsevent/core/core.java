@@ -2,7 +2,7 @@ package net.xsapi.panat.xsevent.core;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import net.momirealms.customfishing.CustomFishing;
+import net.momirealms.customfishing.api.CustomFishingPlugin;
 import net.xsapi.panat.xsevent.command.commandsLoader;
 import net.xsapi.panat.xsevent.configuration.config;
 import net.xsapi.panat.xsevent.configuration.configLoader;
@@ -24,10 +24,7 @@ import redis.clients.jedis.JedisPubSub;
 
 import java.lang.reflect.Type;
 import java.time.LocalTime;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static net.xsapi.panat.xsevent.gui.XSEventUI.updateInventory;
 
@@ -42,7 +39,7 @@ public final class core extends JavaPlugin {
 
     public static HashMap<UUID,xsPlayer> XSPlayer = new HashMap<UUID, xsPlayer>();
 
-    public static CustomFishing cfAPI = null;
+    public static CustomFishingPlugin cfAPI = null;
 
     public static HashMap<UUID, Inventory> pOpenGUI = new HashMap<>();
     private static boolean usingRedis = false;
@@ -76,6 +73,7 @@ public final class core extends JavaPlugin {
                 //subscribeToChannelAsync(core.getLocalRedis());
                 subscribeToChannelAsync("LoginEvent/"+core.getLocalRedis());
                 subscribeToChannelAsync("XSEventRedisData/"+core.getRedisHost());
+                subscribeToChannelAsync("XSEventRedisDataEnd/"+core.getRedisHost());
             }
         }
 
@@ -171,6 +169,49 @@ public final class core extends JavaPlugin {
 
                           //  Bukkit.getConsoleSender().sendMessage("--------------------------------");
 
+                        } else if(channel.equalsIgnoreCase("XSEventRedisDataEnd/" + core.getRedisHost())) {
+                            Gson gson = new Gson();
+                            Bukkit.getLogger().info("Received... End Signal");
+                            String keyID = message.split("<SPLIT>")[0];
+                            String data = message.split("<SPLIT>")[1];
+
+                            //Bukkit.getLogger().info("KEY: " + keyID);
+                            //Bukkit.getLogger().info("DATA: " + data);
+
+                            Type scoreMapType = new TypeToken<HashMap<String, HashMap<String, XSScore>>>() {}.getType();
+                            HashMap<String, HashMap<String, XSScore>> scoreRedis = gson.fromJson(data, scoreMapType);
+
+                            //Bukkit.broadcastMessage("HashMap ScoreRedis " + scoreRedis.toString());
+                            //Bukkit.broadcastMessage("-------------------------------");
+                            for (String key : scoreRedis.keySet()) {
+                                //Bukkit.broadcastMessage("Key Map: " + key );
+                                if(!XSEventHandler.getListEvent().get(key).isStart()) {
+                                    for (Map.Entry<String,XSScore> scoreList : scoreRedis.get(key).entrySet()) {
+                                        if(!XSEventHandler.getListEvent().get(key).getScoreList().containsKey(scoreList.getKey())) {
+                                            XSEventHandler.getListEvent().get(key).getScoreList().put(scoreList.getKey(),scoreList.getValue());
+                                        } else {
+                                            if(XSEventHandler.getListEvent().get(key).getScoreList().get(scoreList.getKey()).getScore() < scoreList.getValue().getScore()) {
+                                                XSEventHandler.getListEvent().get(key).getScoreList().put(scoreList.getKey(),scoreList.getValue());
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            ArrayList<Map.Entry<String, XSScore>> entries = new ArrayList<>(XSEventHandler.getListEvent().get(keyID).getScoreList().entrySet());
+                            //Bukkit.broadcastMessage("entries " + entries);
+                            //Bukkit.broadcastMessage("-------------------------------");
+                            entries.sort(new Comparator<Map.Entry<String, XSScore>>() {
+                                @Override
+                                public int compare(Map.Entry<String, XSScore> entry1, Map.Entry<String, XSScore> entry2) {
+                                    double score1 = entry1.getValue().score;
+                                    double score2 = entry2.getValue().score;
+
+                                    return Double.compare(score2, score1);
+                                }
+                            });
+
+                            XSEventHandler.getListEvent().get(keyID).endBoardcast(entries);
                         }
                      //   Bukkit.getConsoleSender().sendMessage("Received message from channel '" + channel + "': " + message);
                     }
@@ -325,7 +366,7 @@ public final class core extends JavaPlugin {
 
     public boolean setUPCustomFishing() {
         if (Bukkit.getPluginManager().getPlugin("CustomFishing") != null) {
-            this.cfAPI = CustomFishing.getInstance();
+            this.cfAPI = CustomFishingPlugin.getInstance();
         }
         if (this.cfAPI != null) {
             return true;

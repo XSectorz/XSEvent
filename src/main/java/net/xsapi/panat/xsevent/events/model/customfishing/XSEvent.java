@@ -1,7 +1,7 @@
 package net.xsapi.panat.xsevent.events.model.customfishing;
 
-import net.momirealms.customfishing.api.event.FishResultEvent;
-import net.momirealms.customfishing.fishing.FishResult;
+import net.momirealms.customfishing.api.mechanic.loot.LootType;
+import net.momirealms.customfishing.api.event.FishingResultEvent;
 import net.xsapi.panat.xsevent.events.handler.XSEventHandler;
 import net.xsapi.panat.xsevent.events.model.utils.XSEventTemplate;
 import net.xsapi.panat.xsevent.events.model.utils.XSEventType;
@@ -14,15 +14,15 @@ import java.util.Map;
 
 public class XSEvent implements Listener {
     @EventHandler
-    public void onFish(FishResultEvent e) {
+    public void onFish(FishingResultEvent e) {
 
         for(Map.Entry<String,XSEventTemplate> eventList : XSEventHandler.getListEvent().entrySet()) {
             XSEventTemplate xsEventTemplate = eventList.getValue();
             if(xsEventTemplate.getEventType().equals(XSEventType.CUSTOM_FISHING)) {
                 if(xsEventTemplate.isStart()) {
-                    FishResult result = e.getResult();
+                    FishingResultEvent.Result result = e.getResult();
 
-                    if(result.equals(FishResult.FAILURE) || result.equals(FishResult.CATCH_SPECIAL_ITEM)) {
+                    if(result.equals(FishingResultEvent.Result.FAILURE) || e.getLoot().getType().equals(LootType.ITEM)) {
                         Player p = e.getPlayer();
                         if(!xsEventTemplate.getScoreList().containsKey(p.getUniqueId().toString())) {
                             XSScore xsScore = new XSScore(p.getName().toString());
@@ -31,9 +31,9 @@ public class XSEvent implements Listener {
 
                         XSScore score = xsEventTemplate.getScoreList().get(p.getUniqueId().toString());
 
-                        if(result.equals(FishResult.FAILURE)) {
+                        if(result.equals(FishingResultEvent.Result.FAILURE)) {
                             score.setScore(score.getScore()-3);
-                        } else if(result.equals(FishResult.CATCH_SPECIAL_ITEM)) {
+                        } else if(e.getLoot().getType().equals(LootType.ITEM)) {
                             score.setScore(score.getScore()+5);
                         }
                         xsEventTemplate.getScoreList().replace(p.getUniqueId().toString(),score);
