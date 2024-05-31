@@ -46,6 +46,8 @@ public final class core extends JavaPlugin {
     private static String hostRedis;
     private static String localRedis;
 
+    public static ArrayList<Thread> threads = new ArrayList<>();
+
     @Override
     public void onEnable() {
         plugin = this;
@@ -99,7 +101,7 @@ public final class core extends JavaPlugin {
         String redisHost = config.customConfig.getString("redis.host");
         int redisPort = config.customConfig.getInt("redis.port");
         String password = config.customConfig.getString("redis.password");
-        new Thread(() -> {
+        Thread thread = new Thread(() -> {
             try (Jedis jedis = new Jedis(redisHost, redisPort)) {
                 if(!password.isEmpty()) {
                     jedis.auth(password);
@@ -107,6 +109,12 @@ public final class core extends JavaPlugin {
                 JedisPubSub jedisPubSub = new JedisPubSub() {
                     @Override
                     public void onMessage(String channel, String message) {
+
+                        if (Thread.currentThread().isInterrupted()) {
+                            //core.getPlugin().getLogger().info("Redis Guild : Is interrupt");
+                            return;
+                        }
+
                         if(channel.equalsIgnoreCase("LoginEvent/"+core.getLocalRedis())) {
                          //   Bukkit.getConsoleSender().sendMessage("Received Data Login " + message);
                             Gson gson = new Gson();
@@ -212,6 +220,10 @@ public final class core extends JavaPlugin {
                             });
 
                             XSEventHandler.getListEvent().get(keyID).endBoardcast(entries);
+                            XSEventHandler.getListEvent().get(keyID).getScoreList().clear();
+
+                           // Bukkit.broadcastMessage("Size Data: " + XSEventHandler.getListEvent().get(keyID).getScoreList().size());
+
                         }
                      //   Bukkit.getConsoleSender().sendMessage("Received message from channel '" + channel + "': " + message);
                     }
@@ -221,7 +233,9 @@ public final class core extends JavaPlugin {
                 // จัดการข้อผิดพลาดที่เกิดขึ้น
                 e.printStackTrace();
             }
-        }).start();
+        });
+        thread.start();
+        threads.add(thread);
     }
 
     public void sendMessageToRedisAsync(String CHName,String message) {
@@ -360,6 +374,9 @@ public final class core extends JavaPlugin {
     @Override
     public void onDisable() {
         Bukkit.getConsoleSender().sendMessage("§c[XSEVENT] Plugin Disabled " + Bukkit.getServer().getBukkitVersion());
+        for(Thread thread : threads) {
+            thread.interrupt();
+        }
     }
 
 
