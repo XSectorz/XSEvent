@@ -22,7 +22,7 @@ public class XSEvent implements Listener {
                 if(xsEventTemplate.isStart()) {
                     FishingResultEvent.Result result = e.getResult();
 
-                    if(result.equals(FishingResultEvent.Result.FAILURE) || e.getLoot().getType().equals(LootType.ITEM)) {
+                    if(result.equals(FishingResultEvent.Result.FAILURE) || e.getLoot().type().equals(LootType.ITEM)) {
                         Player p = e.getPlayer();
                         if(!xsEventTemplate.getScoreList().containsKey(p.getUniqueId().toString())) {
                             XSScore xsScore = new XSScore(p.getName().toString());
@@ -33,7 +33,7 @@ public class XSEvent implements Listener {
 
                         if(result.equals(FishingResultEvent.Result.FAILURE)) {
                             score.setScore(score.getScore()-3);
-                        } else if(e.getLoot().getType().equals(LootType.ITEM)) {
+                        } else if(e.getLoot().type().equals(LootType.ITEM)) {
                             score.setScore(score.getScore()+5);
                         }
                         xsEventTemplate.getScoreList().replace(p.getUniqueId().toString(),score);

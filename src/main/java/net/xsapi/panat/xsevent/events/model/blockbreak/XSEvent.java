@@ -1,10 +1,12 @@
 package net.xsapi.panat.xsevent.events.model.blockbreak;
 
+import net.xsapi.panat.xsevent.core.core;
 import net.xsapi.panat.xsevent.events.handler.XSEventHandler;
 import net.xsapi.panat.xsevent.events.model.utils.XSEventRequire;
 import net.xsapi.panat.xsevent.events.model.utils.XSEventTemplate;
 import net.xsapi.panat.xsevent.events.model.utils.XSEventType;
 import net.xsapi.panat.xsevent.events.model.utils.XSScore;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.entity.Player;
@@ -40,6 +42,11 @@ public class XSEvent implements Listener {
                                 return;
                             }
                         }
+
+                        if(!core.getCoreProtectAPI().blockLookup(e.getBlock(),60).isEmpty()) {
+                            return;
+                        }
+
                         if(!xsEventTemplate.getScoreList().containsKey(p.getUniqueId().toString())) {
                             XSScore xsScore = new XSScore(p.getName().toString());
                             xsEventTemplate.getScoreList().put(p.getUniqueId().toString(),xsScore);

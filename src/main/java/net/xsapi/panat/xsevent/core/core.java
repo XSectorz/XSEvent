@@ -2,7 +2,9 @@ package net.xsapi.panat.xsevent.core;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import net.momirealms.customfishing.api.CustomFishingPlugin;
+import net.coreprotect.CoreProtect;
+import net.coreprotect.CoreProtectAPI;
+import net.momirealms.customfishing.api.BukkitCustomFishingPlugin;
 import net.xsapi.panat.xsevent.command.commandsLoader;
 import net.xsapi.panat.xsevent.configuration.config;
 import net.xsapi.panat.xsevent.configuration.configLoader;
@@ -17,6 +19,7 @@ import net.xsapi.panat.xsevent.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import redis.clients.jedis.Jedis;
@@ -39,7 +42,9 @@ public final class core extends JavaPlugin {
 
     public static HashMap<UUID,xsPlayer> XSPlayer = new HashMap<UUID, xsPlayer>();
 
-    public static CustomFishingPlugin cfAPI = null;
+    public static BukkitCustomFishingPlugin cfAPI = null;
+
+    public static CoreProtectAPI coreProtectAPI;
 
     public static HashMap<UUID, Inventory> pOpenGUI = new HashMap<>();
     private static boolean usingRedis = false;
@@ -379,11 +384,35 @@ public final class core extends JavaPlugin {
         }
     }
 
+    private CoreProtectAPI getCoreProtect() {
+        Plugin plugin = getServer().getPluginManager().getPlugin("CoreProtect");
+
+        if (plugin == null || !(plugin instanceof CoreProtect)) {
+            return null;
+        }
+
+        // Check that the API is enabled
+        CoreProtectAPI CoreProtect = ((CoreProtect) plugin).getAPI();
+        if (CoreProtect.isEnabled() == false) {
+            return null;
+        }
+
+        // Check that a compatible version of the API is loaded
+        if (CoreProtect.APIVersion() < 10) {
+            return null;
+        }
+
+        return CoreProtect;
+    }
+
+    public static CoreProtectAPI getCoreProtectAPI() {
+        return coreProtectAPI;
+    }
 
 
     public boolean setUPCustomFishing() {
         if (Bukkit.getPluginManager().getPlugin("CustomFishing") != null) {
-            this.cfAPI = CustomFishingPlugin.getInstance();
+            this.cfAPI = BukkitCustomFishingPlugin.getInstance();
         }
         if (this.cfAPI != null) {
             return true;
@@ -396,6 +425,13 @@ public final class core extends JavaPlugin {
             Bukkit.getConsoleSender().sendMessage("§x§f§f§c§e§2§2[XSEVENT] CustomFishing: §x§f§f§5§8§5§8Not Hook");
         } else {
             Bukkit.getConsoleSender().sendMessage("§x§f§f§c§e§2§2[XSEVENT] CustomFishing: §x§5§d§f§f§6§3Hook");
+        }
+
+        coreProtectAPI = getCoreProtect();
+        if (coreProtectAPI == null){
+            Bukkit.getConsoleSender().sendMessage("§x§f§f§c§e§2§2[XSEVENT] CoreProtect: §x§f§f§5§8§5§8Not Hook");
+        } else {
+            Bukkit.getConsoleSender().sendMessage("§x§f§f§c§e§2§2[XSEVENT] CoreProtect: §x§5§d§f§f§6§3Hook");
         }
     }
 
