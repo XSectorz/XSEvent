@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -400,6 +401,8 @@ public class XSEventTemplate {
 
     public void endBoardcast(ArrayList<Map.Entry<String, XSScore>> ranking) {
 
+        DecimalFormat df = new DecimalFormat("#.##");
+
         ArrayList<Map.Entry<String, XSScore>> tempRanking = (ArrayList<Map.Entry<String, XSScore>>) ranking.clone();
 
         for (String text : this.getEvtTrigger().getEndBoardcast()) {
@@ -454,7 +457,7 @@ public class XSEventTemplate {
                                 Objects.requireNonNull(messages.customConfig.getString("placeholders.no_score")));
                     } else {
                         text = text.replace("%xsevent_top_score_" + match + "%",
-                                String.valueOf(ranking.get(rank - 1).getValue().getScore()));
+                                df.format(ranking.get(rank - 1).getValue().getScore()));
                     }
                 }
             }
@@ -493,7 +496,7 @@ public class XSEventTemplate {
     public void sendNotify() {
 
         ArrayList<Map.Entry<String, XSScore>> ranking = new ArrayList<>(scoreList.entrySet());
-
+        DecimalFormat df = new DecimalFormat("#.##");
         ranking.sort(new Comparator<Map.Entry<String, XSScore>>() {
             @Override
             public int compare(Map.Entry<String, XSScore> entry1, Map.Entry<String, XSScore> entry2) {
@@ -550,7 +553,7 @@ public class XSEventTemplate {
                                     Objects.requireNonNull(messages.customConfig.getString("placeholders.no_score")));
                         } else {
                             text = text.replace("%xsevent_top_score_" + match + "%",
-                                    String.valueOf(ranking.get(rank - 1).getValue().getScore()));
+                                    df.format((ranking.get(rank - 1).getValue().getScore())));
                         }
                     }
                 }
@@ -562,7 +565,7 @@ public class XSEventTemplate {
                     text = text.replace("%xsevent_score%",Objects.requireNonNull(messages.customConfig.getString("placeholders.no_score")));
                 } else {
                     text = text.replace("%xsevent_myrank%",pRank.get(p.getName()).toString());
-                    text = text.replace("%xsevent_score%",pScore.get(p.getName()).toString());
+                    text = text.replace("%xsevent_score%",df.format(pScore.get(p.getName())));
                 }
 
                 p.sendMessage(Utils.replaceColor(text));

@@ -61,6 +61,12 @@ public class XSEventUI {
 
     public static void updateInventory(Player p) {
         Inventory inv = core.pOpenGUI.get(p.getUniqueId());
+
+        if(inv == null) {
+            p.closeInventory();
+            return;
+        }
+
         updateInventoryContents(inv,p);
         p.updateInventory();
     }
